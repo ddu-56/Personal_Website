@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <!-- Keypoint connections -->
+  <circle cx="150" cy="180" r="4" fill="none" stroke="#3a6fa3" stroke-width="1.5" opacity="0.3"/>
+  <circle cx="320" cy="160" r="4" fill="none" stroke="#3a6fa3" stroke-width="1.5" opacity="0.3"/>
+  <circle cx="480" cy="200" r="4" fill="none" stroke="#3a6fa3" stroke-width="1.5" opacity="0.3"/>
+  <circle cx="620" cy="170" r="4" fill="none" stroke="#3a6fa3" stroke-width="1.5" opacity="0.3"/>
+  <line x1="154" y1="180" x2="316" y2="160" stroke="#3a6fa3" stroke-width="0.8" opacity="0.15"/>
+  <line x1="324" y1="160" x2="476" y2="200" stroke="#3a6fa3" stroke-width="0.8" opacity="0.15"/>
+  <line x1="484" y1="200" x2="616" y2="170" stroke="#3a6fa3" stroke-width="0.8" opacity="0.15"/>
+  <!-- Neural network nodes -->
+  <circle cx="100" cy="350" r="6" fill="none" stroke="#3a6fa3" stroke-width="1.2" opacity="0.2"/>
+  <circle cx="100" cy="400" r="6" fill="none" stroke="#3a6fa3" stroke-width="1.2" opacity="0.2"/>
+  <circle cx="100" cy="450" r="6" fill="none" stroke="#3a6fa3" stroke-width="1.2" opacity="0.2"/>
+  <circle cx="200" cy="370" r="6" fill="none" stroke="#3a6fa3" stroke-width="1.2" opacity="0.2"/>
+  <circle cx="200" cy="420" r="6" fill="none" stroke="#3a6fa3" stroke-width="1.2" opacity="0.2"/>
+  <circle cx="300" cy="400" r="6" fill="none" stroke="#3a6fa3" stroke-width="1.2" opacity="0.2"/>
+  <!-- Network connections -->
+  <line x1="106" y1="350" x2="194" y2="370" stroke="#3a6fa3" stroke-width="0.6" opacity="0.12"/>
+  <line x1="106" y1="350" x2="194" y2="420" stroke="#3a6fa3" stroke-width="0.6" opacity="0.12"/>
+  <line x1="106" y1="400" x2="194" y2="370" stroke="#3a6fa3" stroke-width="0.6" opacity="0.12"/>
+  <line x1="106" y1="400" x2="194" y2="420" stroke="#3a6fa3" stroke-width="0.6" opacity="0.12"/>
+  <line x1="106" y1="450" x2="194" y2="370" stroke="#3a6fa3" stroke-width="0.6" opacity="0.12"/>
+  <line x1="106" y1="450" x2="194" y2="420" stroke="#3a6fa3" stroke-width="0.6" opacity="0.12"/>
+  <line x1="206" y1="370" x2="294" y2="400" stroke="#3a6fa3" stroke-width="0.6" opacity="0.12"/>
+  <line x1="206" y1="420" x2="294" y2="400" stroke="#3a6fa3" stroke-width="0.6" opacity="0.12"/>
+  <!-- Conv kernel -->
+  <rect x="550" y="320" width="20" height="20" fill="#3a6fa3" opacity="0.08" stroke="#3a6fa3" stroke-width="0.5" stroke-opacity="0.2"/>
+  <rect x="570" y="320" width="20" height="20" fill="#3a6fa3" opacity="0.15" stroke="#3a6fa3" stroke-width="0.5" stroke-opacity="0.2"/>
+  <rect x="590" y="320" width="20" height="20" fill="#3a6fa3" opacity="0.06" stroke="#3a6fa3" stroke-width="0.5" stroke-opacity="0.2"/>
+  <rect x="550" y="340" width="20" height="20" fill="#3a6fa3" opacity="0.18" stroke="#3a6fa3" stroke-width="0.5" stroke-opacity="0.2"/>
+  <rect x="570" y="340" width="20" height="20" fill="#3a6fa3" opacity="0.25" stroke="#3a6fa3" stroke-width="0.5" stroke-opacity="0.2"/>
+  <rect x="590" y="340" width="20" height="20" fill="#3a6fa3" opacity="0.18" stroke="#3a6fa3" stroke-width="0.5" stroke-opacity="0.2"/>
+  <rect x="550" y="360" width="20" height="20" fill="#3a6fa3" opacity="0.06" stroke="#3a6fa3" stroke-width="0.5" stroke-opacity="0.2"/>
+  <rect x="570" y="360" width="20" height="20" fill="#3a6fa3" opacity="0.15" stroke="#3a6fa3" stroke-width="0.5" stroke-opacity="0.2"/>
+  <rect x="590" y="360" width="20" height="20" fill="#3a6fa3" opacity="0.08" stroke="#3a6fa3" stroke-width="0.5" stroke-opacity="0.2"/>
+  <!-- Bounding box fragments -->
+  <path d="M520 80 L520 60 L540 60" fill="none" stroke="#3a6fa3" stroke-width="1.5" opacity="0.2"/>
+  <path d="M680 60 L700 60 L700 80" fill="none" stroke="#3a6fa3" stroke-width="1.5" opacity="0.2"/>
+  <path d="M520 180 L520 200 L540 200" fill="none" stroke="#3a6fa3" stroke-width="1.5" opacity="0.2"/>
+  <path d="M680 200 L700 200 L700 180" fill="none" stroke="#3a6fa3" stroke-width="1.5" opacity="0.2"/>
+  <!-- Triangular markers -->
+  <polygon points="350,80 355,70 360,80" fill="#3a6fa3" opacity="0.15"/>
+  <polygon points="450,120 455,110 460,120" fill="#3a6fa3" opacity="0.15"/>
+  <polygon points="680,280 685,270 690,280" fill="#3a6fa3" opacity="0.15"/>
+</svg>
