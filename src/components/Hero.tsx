@@ -87,8 +87,9 @@ export default function Hero() {
           </div>
         </motion.div>
 
-        {/* Parallax visual – z-20 keeps it above the PixelBlast background */}
+        {/* Parallax visual – frosted backdrop so it reads over PixelBlast */}
         <div className="relative z-20 hidden h-96 w-96 lg:block" aria-hidden="true">
+          <div className="absolute inset-0 rounded-2xl bg-paper/80 backdrop-blur-sm" />
           <motion.div style={{ x: bgX, y: bgY }} className="absolute inset-0">
             <Image
               src="/images/hero-layer-bg.svg"
