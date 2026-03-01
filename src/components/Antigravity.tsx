@@ -24,7 +24,7 @@ interface InnerProps {
 }
 
 function AntigravityInner({
-  count = 300,
+  count = 100,
   magnetRadius = 10,
   ringRadius = 10,
   waveSpeed = 0.4,
@@ -32,7 +32,7 @@ function AntigravityInner({
   particleSize = 2,
   lerpSpeed = 0.1,
   color = "#2d5a8e",
-  autoAnimate = false,
+  autoAnimate = true,
   particleVariance = 1,
   rotationSpeed = 0,
   depthFactor = 1,
@@ -86,7 +86,7 @@ function AntigravityInner({
 
     const mouseDist = Math.sqrt(
       Math.pow(m.x - lastMousePos.current.x, 2) +
-        Math.pow(m.y - lastMousePos.current.y, 2),
+      Math.pow(m.y - lastMousePos.current.y, 2),
     );
 
     if (mouseDist > 0.001) {
@@ -157,7 +157,7 @@ function AntigravityInner({
 
       const currentDistToMouse = Math.sqrt(
         Math.pow(particle.cx - projectedTargetX, 2) +
-          Math.pow(particle.cy - projectedTargetY, 2),
+        Math.pow(particle.cy - projectedTargetY, 2),
       );
 
       const distFromRing = Math.abs(currentDistToMouse - ringRadius);

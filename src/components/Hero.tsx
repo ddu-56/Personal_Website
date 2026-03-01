@@ -1,8 +1,11 @@
 "use client";
 
 import { useRef } from "react";
+import dynamic from "next/dynamic";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Image from "next/image";
+
+const PixelBlast = dynamic(() => import("./PixelBlast"), { ssr: false });
 
 export default function Hero() {
   const containerRef = useRef<HTMLElement>(null);
@@ -31,13 +34,33 @@ export default function Hero() {
       onMouseMove={handleMouseMove}
       className="relative flex min-h-screen items-center overflow-hidden px-6 sm:px-12 lg:px-24"
     >
-      <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-12 lg:flex-row lg:justify-between">
-        {/* Text */}
+      {/* PixelBlast background – only covers this hero section */}
+      <div className="pointer-events-none absolute inset-0">
+        <PixelBlast
+          variant="square"
+          pixelSize={4}
+          color="#2d5a8e"
+          patternScale={2}
+          patternDensity={1}
+          pixelSizeJitter={0}
+          enableRipples
+          rippleSpeed={0.4}
+          rippleThickness={0.12}
+          rippleIntensityScale={1.5}
+          liquid={false}
+          speed={0.5}
+          edgeFade={0.25}
+          transparent
+        />
+      </div>
+
+      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center gap-12 lg:flex-row lg:justify-between">
+        {/* Text – backdrop so it reads over PixelBlast */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="max-w-xl text-center lg:text-left"
+          className="max-w-xl rounded-2xl bg-paper/80 p-6 text-center backdrop-blur-sm lg:text-left"
         >
           <h1 className="font-serif text-5xl leading-tight font-bold tracking-tight text-ink sm:text-6xl lg:text-7xl">
             Darrin Du
@@ -64,8 +87,8 @@ export default function Hero() {
           </div>
         </motion.div>
 
-        {/* Parallax visual */}
-        <div className="relative hidden h-96 w-96 lg:block" aria-hidden="true">
+        {/* Parallax visual – z-20 keeps it above the PixelBlast background */}
+        <div className="relative z-20 hidden h-96 w-96 lg:block" aria-hidden="true">
           <motion.div style={{ x: bgX, y: bgY }} className="absolute inset-0">
             <Image
               src="/images/hero-layer-bg.svg"
