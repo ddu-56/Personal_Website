@@ -1,29 +1,11 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
-
-const Antigravity = dynamic(() => import("./Antigravity"), { ssr: false });
 
 export default function About() {
   return (
-    <section id="about" className="relative overflow-hidden px-6 py-24 sm:px-12 lg:px-24">
-      {/* Particle background – contained to this section */}
-      <div className="pointer-events-none absolute inset-0 opacity-40">
-        <Antigravity
-          count={200}
-          color="#2d5a8e"
-          particleSize={1.8}
-          magnetRadius={8}
-          ringRadius={8}
-          autoAnimate={true}
-          waveSpeed={0.3}
-          waveAmplitude={0.8}
-          rotationSpeed={0.1}
-          particleShape="capsule"
-        />
-      </div>
-      <div className="relative z-10 mx-auto max-w-3xl">
+    <section id="about" className="px-6 py-24 sm:px-12 lg:px-24">
+      <div className="mx-auto max-w-3xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -35,16 +17,16 @@ export default function About() {
           </h2>
           <div className="mt-8 space-y-5 text-lg leading-relaxed text-muted">
             <p>
-              Hello! My Name is Darrin Du. I am a Computer Science student specializing
-              in Computer Vision, with a focus on Object Detection, Semantic
-              Segmentation, and 3D Scene Understanding. My research explores how machines can
-              perceive, interpret, and reconstruct the visual world.
+              Hello! My Name is Darrin Du, I am a Computer Science student at the Univeristy
+              of Michigan. I am specializing in Computer Vision, experimenting with the possibiltiies
+              of VR and AR developemnt. I am interested in how we can use AI to create more immersive
+              and interactive experiences.
             </p>
             <p>
-              My work spans from real-time detection systems on edge devices to
-              transformer-based architectures for dense prediction tasks. I am
-              particularly interested in bridging the gap between 2D image
-              understanding and 3D spatial reasoning.
+              I am passionate about building and learning about systems that can understand and interact
+              with the world around us. I have relevant experience in building real-time detection systems
+              on edge devices to transformer-based architectures for dense prediction tasks. I am
+              particularly interested in bridging the gap between 2D image understanding and 3D spatial reasoning.
             </p>
           </div>
 
