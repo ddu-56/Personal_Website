@@ -16,7 +16,7 @@ export default function About() {
           particleSize={1.8}
           magnetRadius={8}
           ringRadius={8}
-          autoAnimate
+          autoAnimate={true}
           waveSpeed={0.3}
           waveAmplitude={0.8}
           rotationSpeed={0.1}
@@ -35,9 +35,9 @@ export default function About() {
           </h2>
           <div className="mt-8 space-y-5 text-lg leading-relaxed text-muted">
             <p>
-              I am a Computer Science student specializing in Computer Vision,
-              with a focus on Object Detection, Semantic Segmentation, and 3D
-              Scene Understanding. My research explores how machines can
+              Hello! My Name is Darrin Du. I am a Computer Science student specializing
+              in Computer Vision, with a focus on Object Detection, Semantic
+              Segmentation, and 3D Scene Understanding. My research explores how machines can
               perceive, interpret, and reconstruct the visual world.
             </p>
             <p>

@@ -60,7 +60,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="max-w-xl rounded-2xl bg-paper/80 p-6 text-center backdrop-blur-sm lg:text-left"
+          className="max-w-xl rounded-3xl bg-paper/90 p-6 text-center shadow-[0_0_80px_40px_rgba(247,245,240,0.9)] backdrop-blur-sm lg:text-left"
         >
           <h1 className="font-serif text-5xl leading-tight font-bold tracking-tight text-ink sm:text-6xl lg:text-7xl">
             Darrin Du
@@ -89,7 +89,7 @@ export default function Hero() {
 
         {/* Parallax visual – frosted backdrop so it reads over PixelBlast */}
         <div className="relative z-20 hidden h-96 w-96 lg:block" aria-hidden="true">
-          <div className="absolute inset-0 rounded-2xl bg-paper/80 backdrop-blur-sm" />
+          <div className="absolute inset-0 rounded-3xl bg-paper/90 shadow-[0_0_80px_40px_rgba(247,245,240,0.9)] backdrop-blur-sm" />
           <motion.div style={{ x: bgX, y: bgY }} className="absolute inset-0">
             <Image
               src="/images/hero-layer-bg.svg"

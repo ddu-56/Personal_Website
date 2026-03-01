@@ -23,6 +23,19 @@ interface InnerProps {
   fieldStrength?: number;
 }
 
+// Pre-allocated math objects — avoids GC pressure in the render loop
+const _pos = new THREE.Vector3();
+const _scale = new THREE.Vector3();
+const _quat = new THREE.Quaternion();
+const _mat = new THREE.Matrix4();
+const _lookMat = new THREE.Matrix4();
+const _up = new THREE.Vector3(0, 1, 0);
+const _target = new THREE.Vector3();
+const _rotX = new THREE.Quaternion().setFromAxisAngle(
+  new THREE.Vector3(1, 0, 0),
+  Math.PI / 2,
+);
+
 function AntigravityInner({
   count = 100,
   magnetRadius = 10,
@@ -42,7 +55,6 @@ function AntigravityInner({
 }: InnerProps) {
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const { viewport } = useThree();
-  const dummy = useMemo(() => new THREE.Object3D(), []);
 
   const lastMousePos = useRef({ x: 0, y: 0 });
   const lastMouseMoveTime = useRef(0);
@@ -54,25 +66,20 @@ function AntigravityInner({
     const height = viewport.height || 100;
 
     for (let i = 0; i < count; i++) {
-      const t = Math.random() * 100;
-      const speed = 0.01 + Math.random() / 200;
-
       const x = (Math.random() - 0.5) * width;
       const y = (Math.random() - 0.5) * height;
       const z = (Math.random() - 0.5) * 20;
 
-      const randomRadiusOffset = (Math.random() - 0.5) * 2;
-
       temp.push({
-        t,
-        speed,
+        t: Math.random() * 100,
+        speed: 0.01 + Math.random() / 200,
         mx: x,
         my: y,
         mz: z,
         cx: x,
         cy: y,
         cz: z,
-        randomRadiusOffset,
+        randomRadiusOffset: (Math.random() - 0.5) * 2,
       });
     }
     return temp;
@@ -84,14 +91,13 @@ function AntigravityInner({
 
     const { viewport: v, pointer: m } = state;
 
-    const mouseDist = Math.sqrt(
-      Math.pow(m.x - lastMousePos.current.x, 2) +
-      Math.pow(m.y - lastMousePos.current.y, 2),
-    );
-
-    if (mouseDist > 0.001) {
+    // Detect mouse movement — mutate in place instead of allocating new object
+    const dxMouse = m.x - lastMousePos.current.x;
+    const dyMouse = m.y - lastMousePos.current.y;
+    if (dxMouse * dxMouse + dyMouse * dyMouse > 1e-6) {
       lastMouseMoveTime.current = Date.now();
-      lastMousePos.current = { x: m.x, y: m.y };
+      lastMousePos.current.x = m.x;
+      lastMousePos.current.y = m.y;
     }
 
     let destX = (m.x * v.width) / 2;
@@ -100,7 +106,7 @@ function AntigravityInner({
     if (autoAnimate && Date.now() - lastMouseMoveTime.current > 2000) {
       const time = state.clock.getElapsedTime();
       destX = Math.sin(time * 0.5) * (v.width / 4);
-      destY = Math.cos(time * 0.5 * 2) * (v.height / 4);
+      destY = Math.cos(time) * (v.height / 4);
     }
 
     const smoothFactor = 0.05;
@@ -111,79 +117,87 @@ function AntigravityInner({
 
     const targetX = virtualMouse.current.x;
     const targetY = virtualMouse.current.y;
-
     const globalRotation = state.clock.getElapsedTime() * rotationSpeed;
 
-    particles.forEach((particle, i) => {
-      const { mx, my, mz, cz, randomRadiusOffset } = particle;
-      const t = (particle.t += particle.speed / 2);
+    // Hoist loop-invariant computations
+    const magnetRadiusSq = magnetRadius * magnetRadius;
+    const deviationScale = 5 / (fieldStrength + 0.1);
+    const halfWaveAmp = 0.5 * waveAmplitude;
+    const invRingFalloff = 0.1; // 1/10 — replaces division in loop
 
-      const projectionFactor = 1 - cz / 50;
-      const projectedTargetX = targetX * projectionFactor;
-      const projectedTargetY = targetY * projectionFactor;
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      const t = (p.t += p.speed * 0.5);
 
-      const dx = mx - projectedTargetX;
-      const dy = my - projectedTargetY;
-      const dist = Math.sqrt(dx * dx + dy * dy);
+      const projFactor = 1 - p.cz / 50;
+      const projTargetX = targetX * projFactor;
+      const projTargetY = targetY * projFactor;
 
-      const targetPos = { x: mx, y: my, z: mz * depthFactor };
+      const dx = p.mx - projTargetX;
+      const dy = p.my - projTargetY;
+      const distSq = dx * dx + dy * dy;
 
-      if (dist < magnetRadius) {
+      let tPosX = p.mx;
+      let tPosY = p.my;
+      let tPosZ = p.mz * depthFactor;
+
+      if (distSq < magnetRadiusSq) {
         const angle = Math.atan2(dy, dx) + globalRotation;
+        const wave = Math.sin(t * waveSpeed + angle) * halfWaveAmp;
+        const r =
+          ringRadius + wave + p.randomRadiusOffset * deviationScale;
 
-        const wave =
-          Math.sin(t * waveSpeed + angle) * (0.5 * waveAmplitude);
-        const deviation =
-          randomRadiusOffset * (5 / (fieldStrength + 0.1));
-
-        const currentRingRadius = ringRadius + wave + deviation;
-
-        targetPos.x =
-          projectedTargetX + currentRingRadius * Math.cos(angle);
-        targetPos.y =
-          projectedTargetY + currentRingRadius * Math.sin(angle);
-        targetPos.z =
-          mz * depthFactor +
-          Math.sin(t) * (1 * waveAmplitude * depthFactor);
+        tPosX = projTargetX + r * Math.cos(angle);
+        tPosY = projTargetY + r * Math.sin(angle);
+        tPosZ =
+          p.mz * depthFactor +
+          Math.sin(t) * waveAmplitude * depthFactor;
       }
 
-      particle.cx += (targetPos.x - particle.cx) * lerpSpeed;
-      particle.cy += (targetPos.y - particle.cy) * lerpSpeed;
-      particle.cz += (targetPos.z - particle.cz) * lerpSpeed;
+      // Lerp current position toward target
+      p.cx += (tPosX - p.cx) * lerpSpeed;
+      p.cy += (tPosY - p.cy) * lerpSpeed;
+      p.cz += (tPosZ - p.cz) * lerpSpeed;
 
-      dummy.position.set(particle.cx, particle.cy, particle.cz);
-      dummy.lookAt(projectedTargetX, projectedTargetY, particle.cz);
-      dummy.rotateX(Math.PI / 2);
-
-      const currentDistToMouse = Math.sqrt(
-        Math.pow(particle.cx - projectedTargetX, 2) +
-        Math.pow(particle.cy - projectedTargetY, 2),
+      // Scale based on distance from the ring
+      const ddx = p.cx - projTargetX;
+      const ddy = p.cy - projTargetY;
+      const distToMouse = Math.sqrt(ddx * ddx + ddy * ddy);
+      const distFromRing = Math.abs(distToMouse - ringRadius);
+      const scaleFactor = Math.max(
+        0,
+        Math.min(1, 1 - distFromRing * invRingFalloff),
       );
-
-      const distFromRing = Math.abs(currentDistToMouse - ringRadius);
-      let scaleFactor = 1 - distFromRing / 10;
-      scaleFactor = Math.max(0, Math.min(1, scaleFactor));
-
-      const finalScale =
+      const s =
         scaleFactor *
         (0.8 + Math.sin(t * pulseSpeed) * 0.2 * particleVariance) *
         particleSize;
-      dummy.scale.set(finalScale, finalScale, finalScale);
 
-      dummy.updateMatrix();
-      mesh.setMatrixAt(i, dummy.matrix);
-    });
+      // Build instance matrix directly — avoids Object3D overhead
+      _pos.set(p.cx, p.cy, p.cz);
+      _target.set(projTargetX, projTargetY, p.cz);
+      _lookMat.lookAt(_pos, _target, _up);
+      _quat.setFromRotationMatrix(_lookMat).multiply(_rotX);
+      _scale.set(s, s, s);
+      _mat.compose(_pos, _quat, _scale);
+
+      mesh.setMatrixAt(i, _mat);
+    }
 
     mesh.instanceMatrix.needsUpdate = true;
   });
 
   return (
-    <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
+    <instancedMesh
+      ref={meshRef}
+      args={[undefined, undefined, count]}
+      frustumCulled={false}
+    >
       {particleShape === "capsule" && (
-        <capsuleGeometry args={[0.1, 0.4, 4, 8]} />
+        <capsuleGeometry args={[0.1, 0.4, 2, 6]} />
       )}
       {particleShape === "sphere" && (
-        <sphereGeometry args={[0.2, 16, 16]} />
+        <sphereGeometry args={[0.2, 8, 8]} />
       )}
       {particleShape === "box" && <boxGeometry args={[0.3, 0.3, 0.3]} />}
       {particleShape === "tetrahedron" && (
@@ -196,7 +210,11 @@ function AntigravityInner({
 
 export default function Antigravity(props: InnerProps) {
   return (
-    <Canvas camera={{ position: [0, 0, 50], fov: 35 }}>
+    <Canvas
+      camera={{ position: [0, 0, 50], fov: 35 }}
+      dpr={[1, 1.5]}
+      gl={{ antialias: false, powerPreference: "high-performance" }}
+    >
       <AntigravityInner {...props} />
     </Canvas>
   );
