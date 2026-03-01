@@ -1,11 +1,29 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
+
+const Antigravity = dynamic(() => import("./Antigravity"), { ssr: false });
 
 export default function About() {
   return (
-    <section id="about" className="px-6 py-24 sm:px-12 lg:px-24">
-      <div className="mx-auto max-w-3xl">
+    <section id="about" className="relative overflow-hidden px-6 py-24 sm:px-12 lg:px-24">
+      {/* Particle background – contained to this section */}
+      <div className="pointer-events-none absolute inset-0 opacity-40">
+        <Antigravity
+          count={200}
+          color="#2d5a8e"
+          particleSize={1.8}
+          magnetRadius={8}
+          ringRadius={8}
+          autoAnimate
+          waveSpeed={0.3}
+          waveAmplitude={0.8}
+          rotationSpeed={0.1}
+          particleShape="capsule"
+        />
+      </div>
+      <div className="relative z-10 mx-auto max-w-3xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

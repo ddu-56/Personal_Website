@@ -40,9 +40,9 @@ export default function Hero() {
           className="max-w-xl text-center lg:text-left"
         >
           <h1 className="font-serif text-5xl leading-tight font-bold tracking-tight text-ink sm:text-6xl lg:text-7xl">
-            Computer Vision
+            Darrin Du
             <br />
-            <span className="text-accent">Researcher</span>
+            <span className="text-accent">Computer Vision</span>
           </h1>
           <p className="mt-6 text-lg leading-relaxed text-muted sm:text-xl">
             Exploring the boundaries of Object Detection, Segmentation, and 3D
@@ -71,7 +71,7 @@ export default function Hero() {
               src="/images/hero-layer-bg.svg"
               alt=""
               fill
-              className="object-contain opacity-60"
+              className="object-contain opacity-90"
               priority
             />
           </motion.div>
