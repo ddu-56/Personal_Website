@@ -195,7 +195,7 @@ float vnoise(vec3 p){
 
 float fbm2(vec2 uv,float t){
   vec3 p=vec3(uv*uScale,t); float amp=1.0; float freq=1.0; float sum=1.0;
-  for(int i=0;i<5;++i){ sum+=amp*vnoise(p*freq); freq*=1.25; amp*=1.0; }
+  for(int i=0;i<3;++i){ sum+=amp*vnoise(p*freq); freq*=1.25; amp*=1.0; }
   return sum*0.5+0.5;
 }
 
@@ -322,6 +322,21 @@ export default function PixelBlast({
   const threeRef = useRef<any>(null);
   const prevConfigRef = useRef<any>(null);
 
+  // Pause rendering when the component scrolls offscreen
+  useEffect(() => {
+    if (!autoPauseOffscreen) return;
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        visibilityRef.current.visible = entry.isIntersecting;
+      },
+      { threshold: 0 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [autoPauseOffscreen]);
+
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -364,7 +379,7 @@ export default function PixelBlast({
       });
       renderer.domElement.style.width = "100%";
       renderer.domElement.style.height = "100%";
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
       container.appendChild(renderer.domElement);
       if (transparent) renderer.setClearAlpha(0);
       else renderer.setClearColor(0x000000, 1);

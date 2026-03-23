@@ -1,14 +1,17 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Image from "next/image";
+import SplitText from "./SplitText";
+import BlurText from "./BlurText";
 
 const PixelBlast = dynamic(() => import("./PixelBlast"), { ssr: false });
 
 export default function Hero() {
   const containerRef = useRef<HTMLElement>(null);
+  const [stage, setStage] = useState(0);
 
   const mouseX = useMotionValue(0.5);
   const mouseY = useMotionValue(0.5);
@@ -43,10 +46,8 @@ export default function Hero() {
           patternScale={2}
           patternDensity={1}
           pixelSizeJitter={0}
-          enableRipples
-          rippleSpeed={0.4}
-          rippleThickness={0.12}
-          rippleIntensityScale={1.5}
+          enableRipples={false}
+          antialias={false}
           liquid={false}
           speed={0.5}
           edgeFade={0.25}
@@ -56,22 +57,55 @@ export default function Hero() {
 
       <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center gap-12 lg:flex-row lg:justify-between">
         {/* Text – backdrop so it reads over PixelBlast */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="max-w-xl rounded-3xl bg-paper/90 p-6 text-center shadow-[0_0_80px_40px_rgba(247,245,240,0.9)] backdrop-blur-sm lg:text-left"
-        >
-          <h1 className="font-serif text-5xl leading-tight font-bold tracking-tight text-ink sm:text-6xl lg:text-7xl">
-            Darrin Du
-            <br />
-            <span className="text-accent">Computer Vision</span>
-          </h1>
-          <p className="mt-6 text-lg leading-relaxed text-muted sm:text-xl">
-            Exploring the boundaries of Object Detection, Segmentation, and 3D
-            Vision. Building systems that understand the visual world.
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-4 lg:justify-start">
+        <div className="max-w-xl rounded-3xl bg-paper/95 p-6 text-center shadow-[0_0_80px_40px_rgba(247,245,240,0.95)] lg:text-left">
+          {/* Stage 1: Name splits in first */}
+          <SplitText
+            text="Darrin Du"
+            tag="h1"
+            className="font-serif text-5xl leading-tight font-bold tracking-tight text-ink sm:text-6xl lg:text-7xl"
+            delay={60}
+            duration={0.8}
+            ease="power3.out"
+            splitType="chars"
+            from={{ opacity: 0, y: 40 }}
+            to={{ opacity: 1, y: 0 }}
+            threshold={0.1}
+            rootMargin="0px"
+            textAlign="left"
+            onLetterAnimationComplete={() => setStage(1)}
+          />
+
+          {/* Stage 2: Subtitle blurs in after name */}
+          {stage >= 1 && (
+            <BlurText
+              text="Computer Vision"
+              delay={120}
+              animateBy="words"
+              direction="bottom"
+              className="font-serif text-5xl leading-tight font-bold tracking-tight text-accent sm:text-6xl lg:text-7xl"
+              onAnimationComplete={() => setStage(2)}
+            />
+          )}
+
+          {/* Stage 3: Description blurs in after subtitle */}
+          {stage >= 2 && (
+            <BlurText
+              text="Exploring the boundaries of Object Detection, Segmentation, and 3D Vision. Building systems that understand the visual world."
+              delay={80}
+              animateBy="words"
+              direction="top"
+              className="mt-6 text-lg leading-relaxed text-muted sm:text-xl"
+              onAnimationComplete={() => setStage(3)}
+            />
+          )}
+
+          {/* Stage 4: Buttons fade in last */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={stage >= 3 ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="mt-8 flex flex-wrap justify-center gap-4 lg:justify-start"
+          >
             <a
               href="#projects"
               onClick={(e) => {
@@ -96,12 +130,12 @@ export default function Hero() {
             >
               About Me
             </a>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
 
         {/* Parallax visual – frosted backdrop so it reads over PixelBlast */}
         <div className="relative z-20 hidden h-96 w-96 lg:block" aria-hidden="true">
-          <div className="absolute inset-0 rounded-3xl bg-paper/90 shadow-[0_0_80px_40px_rgba(247,245,240,0.9)] backdrop-blur-sm" />
+          <div className="absolute inset-0 rounded-3xl bg-paper/95 shadow-[0_0_80px_40px_rgba(247,245,240,0.95)]" />
           <motion.div style={{ x: bgX, y: bgY }} className="absolute inset-0">
             <Image
               src="/images/hero-layer-bg.svg"
