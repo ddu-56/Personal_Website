@@ -1,75 +1,68 @@
-"use client";
+import Photo from "./Photo";
+import SectionHeader from "./SectionHeader";
 
-import { motion } from "framer-motion";
+const notes = [
+  {
+    label: "Focus",
+    items: [
+      "Object detection & tracking",
+      "Semantic & instance segmentation",
+      "Monocular & stereo depth",
+    ],
+  },
+  { label: "Tools", items: ["PyTorch / TorchVision", "OpenCV", "CUDA / TensorRT"] },
+  { label: "Education", items: ["B.S. Computer Science", "University of Michigan"] },
+  { label: "Off hours", items: ["Hip-hop", "Photography"] },
+];
 
 export default function About() {
   return (
-    <section id="about" className="px-6 py-24 sm:px-12 lg:px-24">
-      <div className="mx-auto max-w-3xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="font-serif text-4xl font-bold tracking-tight text-ink">
-            About
-          </h2>
-          <div className="mt-8 space-y-5 text-lg leading-relaxed text-muted">
-            <p>
-              Hello! My Name is Darrin Du, I am a Computer Science student at the Univeristy
-              of Michigan. I am specializing in Computer Vision, experimenting with the possibiltiies
-              of VR and AR developemnt. I am interested in how we can use AI to create more immersive
-              and interactive experiences.
-            </p>
-            <p>
-              I am passionate about building and learning about systems that can understand and interact
-              with the world around us. I have relevant experience in building real-time detection systems
-              on edge devices to transformer-based architectures for dense prediction tasks. I am
-              particularly interested in bridging the gap between 2D image understanding and 3D spatial reasoning.
-            </p>
-          </div>
+    <section id="about" className="wrap py-24 sm:py-32">
+      <SectionHeader index="05" kicker="About" title="A little more" />
 
-          <div className="mt-12 grid gap-8 sm:grid-cols-3">
-            {[
-              {
-                label: "Research Interests",
-                items: [
-                  "Object Detection & Tracking",
-                  "Semantic & Instance Segmentation",
-                  "Monocular & Stereo Depth Estimation",
-                ],
-              },
-              {
-                label: "Tools & Frameworks",
-                items: [
-                  "PyTorch / TorchVision",
-                  "OpenCV",
-                  "CUDA / TensorRT",
-                ],
-              },
-              {
-                label: "Education",
-                items: [
-                  "B.S. Computer Science",
-                  "Specialization: Computer Vision",
-                  "Expected Graduation: 2026",
-                ],
-              },
-            ].map((col) => (
-              <div key={col.label}>
-                <h3 className="text-sm font-semibold tracking-wide text-accent uppercase">
-                  {col.label}
-                </h3>
-                <ul className="mt-3 space-y-2 text-sm text-muted">
-                  {col.items.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </motion.div>
+      <div className="mt-16 grid grid-cols-12 gap-x-6 gap-y-12">
+        <Photo
+          className="col-span-8 sm:col-span-5 lg:col-span-3"
+          ratio="3/4"
+          alt="Candid photo of Darrin"
+          note="Everyday life"
+          caption="Fig. 3 — Off the clock"
+          frame="person · 0.95"
+          sizes="(min-width: 1024px) 25vw, 60vw"
+        />
+
+        <div className="col-span-12 space-y-5 text-lg leading-relaxed sm:col-span-7 lg:col-span-5 lg:col-start-5">
+          <p>
+            I’m a computer science student at the University of Michigan,
+            specializing in computer vision and experimenting with what’s
+            possible in VR and AR. I’m interested in how AI can make
+            experiences more immersive and interactive.
+          </p>
+          <p className="text-ink/80">
+            I like building systems that understand and interact with the world
+            around them, from real-time detection on edge devices to
+            transformer-based models for dense prediction. Lately I’m most
+            interested in bridging 2D image understanding and 3D spatial
+            reasoning.
+          </p>
+          <p className="text-ink/80">
+            Photography and dance keep me looking at the world the way my work
+            asks me to: carefully, and in motion.
+          </p>
+        </div>
+
+        <dl className="col-span-12 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-rule pt-6 lg:col-span-3 lg:col-start-10 lg:grid-cols-1 lg:border-t-0 lg:pt-1">
+          {notes.map((note) => (
+            <div key={note.label}>
+              <dt className="eyebrow text-[10px] text-muted">{note.label}</dt>
+              {note.items.map((item) => (
+                <dd key={item} className="mt-1.5 text-sm">
+                  {item}
+                </dd>
+              ))}
+            </div>
+          ))}
+        </dl>
       </div>
     </section>
   );

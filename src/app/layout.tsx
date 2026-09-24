@@ -1,35 +1,45 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { IBM_Plex_Mono, Instrument_Sans, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+const serif = Instrument_Serif({
+  variable: "--font-instrument-serif",
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
+const sans = Instrument_Sans({
+  variable: "--font-instrument-sans",
   subsets: ["latin"],
   display: "swap",
 });
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+const mono = IBM_Plex_Mono({
+  variable: "--font-plex-mono",
   subsets: ["latin"],
+  weight: ["400", "500"],
   display: "swap",
 });
+
+const title = "Darrin Du";
+const description =
+  "Computer vision student at the University of Michigan. Hip-hop dancer and photographer.";
 
 export const metadata: Metadata = {
-  title: "Portfolio | Computer Vision Researcher",
-  description:
-    "Academic portfolio showcasing work in Object Detection, Segmentation, and 3D Vision.",
+  title,
+  description,
   openGraph: {
-    title: "Portfolio | Computer Vision Researcher",
-    description:
-      "Academic portfolio showcasing work in Object Detection, Segmentation, and 3D Vision.",
+    title,
+    description,
     type: "website",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Portfolio | Computer Vision Researcher",
-    description:
-      "Academic portfolio showcasing work in Object Detection, Segmentation, and 3D Vision.",
+    title,
+    description,
   },
 };
 
@@ -40,7 +50,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${playfair.variable} antialiased`}>
+      <body
+        className={`${serif.variable} ${sans.variable} ${mono.variable} antialiased`}
+      >
         {children}
       </body>
     </html>

@@ -1,68 +1,49 @@
-export type ProjectTag = "Object Detection" | "Segmentation" | "3D Vision";
-
 export interface Project {
   title: string;
-  description: string;
-  tags: ProjectTag[];
-  thumbnail: string;
-  hoverImage?: string;
+  role: string;
+  dates: string;
+  stack: string[];
+  /** Doubles as the viewfinder's class label. */
+  label: string;
+  bullets: string[];
   repoUrl?: string;
   demoUrl?: string;
 }
 
 export const projects: Project[] = [
   {
-    title: "Real-Time Object Detector",
-    description:
-      "A YOLOv8-based pipeline for real-time object detection on edge devices, achieving 45 FPS on NVIDIA Jetson Nano.",
-    tags: ["Object Detection"],
-    thumbnail: "/images/placeholder-detection.svg",
-    hoverImage: "/images/placeholder-detection-hover.svg",
-    repoUrl: "https://github.com",
+    title: "Clerse",
+    role: "Frontend Developer",
+    dates: "Jan. 2026 – Feb. 2026",
+    stack: ["Next.js 15", "React Flow", "TypeScript", "Liveblocks", "Tailwind CSS"],
+    label: "web",
+    bullets: [
+      "Co-developed a **1st-place** spatial AI canvas platform for a 24-hour Claude hackathon, utilizing **Claude and parallel subagents**.",
+      "Developed an interactive “branching” UI module, allowing users to right-click message threads, fork conversation nodes, and visually track independent contextual branches via animated river edges.",
+      "Executed end-to-end integration testing across 4 UI modules, delivering a flawless live presentation.",
+    ],
   },
   {
-    title: "Semantic Segmentation of Urban Scenes",
-    description:
-      "DeepLabV3+ trained on Cityscapes for pixel-level segmentation of streets, vehicles, and pedestrians with 78.2 mIoU.",
-    tags: ["Segmentation"],
-    thumbnail: "/images/placeholder-segmentation.svg",
-    hoverImage: "/images/placeholder-segmentation-hover.svg",
-    repoUrl: "https://github.com",
+    title: "GEMINI",
+    role: "Mixed Reality Developer · CLAWS Sub-System / NASA SUITS",
+    dates: "Nov. 2025 – May 2026",
+    stack: ["Unity", "C#", "Mixed Reality Toolkit (MRTK)", "GitHub"],
+    label: "mixed reality",
+    bullets: [
+      "Designed and integrated a cohesive end-to-end Augmented Reality (AR) interface in Unity with MRTK, guiding **a past astronaut** (Anne McClain) and engineers through **5 complex lunar mission protocols**.",
+      "Engineered dynamic UI/UX screen workflows tailored for head-mounted displays (HMDs), **lowering cognitive load** and ensuring stable spatial anchoring under simulated extravehicular activity (EVA) constraints.",
+      "**Bridged the gap between AI and UX** sub-teams, successfully embedding a localized AI agent into the spatial environment of the HoloLens to automate task dispatch and stream **real-time** telemetry.",
+    ],
   },
   {
-    title: "Monocular Depth Estimation",
-    description:
-      "Transformer-based monocular depth prediction from single RGB images, producing dense depth maps for indoor scenes.",
-    tags: ["3D Vision"],
-    thumbnail: "/images/placeholder-depth.svg",
-    hoverImage: "/images/placeholder-depth-hover.svg",
-    repoUrl: "https://github.com",
-  },
-  {
-    title: "Instance Segmentation for Microscopy",
-    description:
-      "Mask R-CNN adapted for cell instance segmentation in biomedical microscopy images with 85% AP@50.",
-    tags: ["Object Detection", "Segmentation"],
-    thumbnail: "/images/placeholder-microscopy.svg",
-    hoverImage: "/images/placeholder-microscopy-hover.svg",
-    repoUrl: "https://github.com",
-  },
-  {
-    title: "Stereo Vision Depth Mapping",
-    description:
-      "Classical and learned stereo matching for dense 3D reconstruction from calibrated stereo camera pairs.",
-    tags: ["3D Vision"],
-    thumbnail: "/images/placeholder-stereo.svg",
-    hoverImage: "/images/placeholder-stereo-hover.svg",
-    repoUrl: "https://github.com",
-  },
-  {
-    title: "Panoptic Segmentation Pipeline",
-    description:
-      "Unified panoptic segmentation combining stuff and things classes for complete scene understanding.",
-    tags: ["Segmentation", "Object Detection"],
-    thumbnail: "/images/placeholder-panoptic.svg",
-    hoverImage: "/images/placeholder-panoptic-hover.svg",
-    repoUrl: "https://github.com",
+    title: "Synced In",
+    role: "Solo Developer",
+    dates: "Sept. 2022 – Dec. 2022",
+    stack: ["C#", "Unity", "2D Design", "Game Development"],
+    label: "game",
+    bullets: [
+      "Architected core game logic, player mechanics, and interactive systems from scratch in C#; published to Unity Play.",
+      "Prototyped **20+ puzzle designs** and refined difficulty curves to ship 6 production levels as sole developer, earning **370+ plays**.",
+    ],
   },
 ];
