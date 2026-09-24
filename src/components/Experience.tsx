@@ -1,5 +1,5 @@
 import { experience } from "@/data/experience";
-import Emphasis from "./Emphasis";
+import Details from "./Details";
 import SectionHeader from "./SectionHeader";
 
 export default function Experience() {
@@ -25,17 +25,9 @@ export default function Experience() {
                 </p>
               </div>
               <div className="col-span-10 col-start-3 sm:col-span-6 sm:col-start-7 lg:col-span-5 lg:col-start-8">
-                <ul className="space-y-3 text-[15px] leading-relaxed text-ink/80">
-                  {job.bullets.map((bullet) => (
-                    <li key={bullet} className="relative pl-4">
-                      <span aria-hidden className="absolute left-0 text-signal">
-                        –
-                      </span>
-                      <Emphasis text={bullet} />
-                    </li>
-                  ))}
-                </ul>
-                <p className="eyebrow mt-5 text-[10px] text-muted">{job.stack.join(" / ")}</p>
+                <Details summary={job.summary} bullets={job.bullets}>
+                  <p className="eyebrow mt-3 text-[10px] text-muted">{job.stack.join(" / ")}</p>
+                </Details>
               </div>
             </article>
           </li>

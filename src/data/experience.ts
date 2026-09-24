@@ -6,6 +6,8 @@ export interface Experience {
   stack: string[];
   /** Doubles as the viewfinder's class label. */
   label: string;
+  /** The one-line takeaway shown before the entry is expanded. */
+  summary: string;
   bullets: string[];
 }
 
@@ -17,6 +19,8 @@ export const experience: Experience[] = [
     dates: "May 2026 – Sept. 2026",
     stack: ["Python", "OpenCV", "ROSBAGs", "Git/GitHub"],
     label: "research",
+    summary:
+      "Building real-time OpenCV guidance and patient-safety tracking for VIGIL, a **$26.4M ARPA-H-backed** mobile clinic bringing healthcare to rural areas.",
     bullets: [
       "Expand a real-time visual display system in Python and OpenCV, supplying task guidance with ROS sensor data to improve procedural accuracy for clinicians using VIGIL, a **$26.4M ARPA-H-backed** mobile clinic expanding rural healthcare access.",
       "**Benchmark** different implementation approaches in 3 core parameters (RealSense positioning, spatial placement, jitter safeguards) to engineer a production design based on measured accuracy and latency tradeoffs rather than assumptions.",
@@ -31,6 +35,8 @@ export const experience: Experience[] = [
     dates: "Mar. 2026 – Present",
     stack: ["Unity", "C#", "Mixed Reality Toolkit (MRTK)"],
     label: "leadership",
+    summary:
+      "Co-directing a 12-person AR subteam competing nationally in the NASA SUITS Challenge, cutting feature integration time from **14 to 5 days**.",
     bullets: [
       "Co-directed a 12-person engineering subteam selected to compete nationally in the NASA SUITS Challenge, overseeing the architecture of an AR astronaut interface and backend.",
       "Established Git branching standards and mandatory pull-request review across the 12-person subteam, cutting cross-team feature integration time from 14 to 5 days.",
