@@ -1,4 +1,4 @@
-export const RESUME_URL = "/images/Darrin_Du_Resume(1).pdf";
+export const RESUME_URL = `${process.env.NEXT_PUBLIC_BASE_PATH}/images/Darrin_Du_Resume(1).pdf`;
 
 const nav = [
   { label: "Experience", href: "#experience" },

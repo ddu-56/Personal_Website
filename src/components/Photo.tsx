@@ -35,7 +35,13 @@ export default function Photo({
         style={{ aspectRatio: ratio }}
       >
         {src ? (
-          <Image src={src} alt={alt} fill sizes={sizes} className="object-cover" />
+          <Image
+            src={`${process.env.NEXT_PUBLIC_BASE_PATH}${src}`}
+            alt={alt}
+            fill
+            sizes={sizes}
+            className="object-cover"
+          />
         ) : (
           <div
             role="img"
