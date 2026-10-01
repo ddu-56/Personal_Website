@@ -23,8 +23,9 @@ export default function About() {
       <div className="mt-16 grid grid-cols-12 gap-x-6 gap-y-12">
         <Photo
           className="col-span-8 sm:col-span-5 lg:col-span-3"
+          src="/photos/off-the-clock.jpg"
           ratio="3/4"
-          alt="Candid photo of Darrin"
+          alt="Darrin, seen from behind, looking out over a mountain lake"
           note="Everyday life"
           caption="Fig. 3 — Off the clock"
           frame="person · 0.95"
