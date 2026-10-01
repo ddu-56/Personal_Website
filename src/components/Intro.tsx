@@ -23,6 +23,7 @@ export default function Intro() {
 
       <Photo
         className="col-span-10 col-start-2 mt-16 sm:col-span-6 sm:col-start-6 lg:col-span-4 lg:col-start-9 lg:mt-24"
+        src="/photos/headshot.jpg"
         ratio="4/5"
         alt="Portrait of Darrin Du"
         note="Portrait"

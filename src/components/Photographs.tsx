@@ -4,12 +4,12 @@ import SectionHeader from "./SectionHeader";
 
 // Deliberately uneven, like prints laid out on a table. One entry per photo.
 const LAYOUT = [
-  "col-span-12 sm:col-span-5",
-  "col-span-12 sm:col-span-6 sm:col-start-7 sm:mt-40",
-  "col-span-12 sm:col-span-7 sm:col-start-2",
-  "col-span-8 col-start-5 sm:col-span-3 sm:col-start-10 sm:mt-48",
-  "col-span-10 sm:col-span-4 sm:col-start-3",
-  "col-span-12 sm:col-span-4 sm:col-start-8 sm:mt-24",
+  "col-span-9 sm:col-span-4",
+  "col-span-9 col-start-4 sm:col-span-4 sm:col-start-7 sm:mt-40",
+  "col-span-10 sm:col-span-5 sm:col-start-2",
+  "col-span-7 col-start-6 sm:col-span-3 sm:col-start-9 sm:mt-48",
+  "col-span-7 sm:col-span-3 sm:col-start-3",
+  "col-span-7 col-start-6 sm:col-span-3 sm:col-start-8 sm:mt-24",
 ];
 
 export default function Photographs() {
@@ -28,7 +28,7 @@ export default function Photographs() {
             note={`Frame ${photo.frame}`}
             caption={`${photo.frame} — ${photo.caption}`}
             frame={`frame ${photo.frame}`}
-            sizes="(min-width: 640px) 50vw, 100vw"
+            sizes="(min-width: 640px) 40vw, 80vw"
           />
         ))}
       </div>

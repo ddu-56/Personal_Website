@@ -10,8 +10,9 @@ export default function Dance() {
       <div className="mt-16 grid grid-cols-12 gap-x-6">
         <Photo
           className="col-span-12 lg:col-span-7"
-          ratio="4/5"
-          alt="Darrin dancing"
+          src="/photos/dance-team.jpg"
+          ratio="4/3"
+          alt="Darrin and dance team posing on stage in matching jackets after a show"
           note="Dance — performance or practice"
           caption="Fig. 2 — Hip-hop"
           frame="dancer · 0.97"
