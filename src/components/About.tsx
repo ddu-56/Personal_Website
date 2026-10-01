@@ -4,21 +4,17 @@ import SectionHeader from "./SectionHeader";
 const notes = [
   {
     label: "Focus",
-    items: [
-      "Object detection & tracking",
-      "Semantic & instance segmentation",
-      "Monocular & stereo depth",
-    ],
+    items: ["Computer vision", "AR applications"],
   },
-  { label: "Tools", items: ["PyTorch / TorchVision", "OpenCV", "CUDA / TensorRT"] },
-  { label: "Education", items: ["B.S. Computer Science", "University of Michigan"] },
-  { label: "Off hours", items: ["Hip-hop", "Photography"] },
+  { label: "Tools", items: ["C++ / C# / Python", "OpenCV", "Unity"] },
+  { label: "Education", items: ["B.S.E. Computer Science", "University of Michigan"] },
+  { label: "Off hours", items: ["Hip-hop", "Photography", "Volleyball"] },
 ];
 
 export default function About() {
   return (
     <section id="about" className="wrap py-12 sm:py-16">
-      <SectionHeader index="01" kicker="About" title="A little more" />
+      <SectionHeader index="01" kicker="About" title="A little more" centered />
 
       <div className="mt-10 grid grid-cols-12 gap-x-6 gap-y-12">
         <Photo
@@ -36,15 +32,17 @@ export default function About() {
           <p>
             I’m a computer science student at the University of Michigan,
             specializing in computer vision and experimenting with what’s
-            possible in VR and AR. I’m interested in how AI can make
+            possible in VR and AR. I’m interested in how we can make
             experiences more immersive and interactive.
           </p>
           <p className="text-ink/80">
-            I like building systems that understand and interact with the world
-            around them, from real-time detection on edge devices to
-            transformer-based models for dense prediction. Lately I’m most
-            interested in bridging 2D image understanding and 3D spatial
-            reasoning.
+            I like building systems that see and respond to the world around
+            them. At the HAIL Lab, that means real-time OpenCV tracking that
+            keeps a patient’s eyes masked during procedures in a mobile clinic.
+            With CLAWS, it means HoloLens interfaces that guided a former
+            astronaut through lunar mission protocols. Lately I’m most
+            interested in where the two meet: using vision to anchor digital
+            interfaces in real, physical space.
           </p>
           <p className="text-ink/80">
             Photography and dance keep me looking at the world the way my work

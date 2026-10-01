@@ -20,13 +20,12 @@ export default function Dance() {
           sizes="(min-width: 1024px) 58vw, 100vw"
         />
 
-        <div className="col-span-12 mt-12 flex flex-col justify-between gap-12 lg:col-span-4 lg:col-start-9 lg:mt-0">
+        <div className="col-span-12 mt-12 flex flex-col justify-center gap-8 lg:col-span-4 lg:col-start-9 lg:mt-0">
           <Counts />
           <div>
             <p className="font-serif text-3xl leading-snug">
-              Hip-hop taught me most of what I know about practice: drill the
-              eight-count until you stop thinking about it, then find somewhere
-              to play.
+              Hip-hop taught me most of what I know about practice: if you need
+              help ask, and if you still struggle just keep practicing.
             </p>
             <p className="mt-6 text-[15px] leading-relaxed text-ink/80">
               I dance hip-hop choreography in classes, practice rooms, and on

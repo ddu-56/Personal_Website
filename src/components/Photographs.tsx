@@ -3,13 +3,22 @@ import Photo from "./Photo";
 import SectionHeader from "./SectionHeader";
 
 // Deliberately uneven, like prints laid out on a table. One entry per photo.
+// On wider screens the rows run 3 · 3 · 2 · 1: a large print with two smaller
+// ones, a strip of three tall frames, a staggered pair, then one closing frame.
 const LAYOUT = [
-  "col-span-9 sm:col-span-4 sm:col-start-2",
-  "col-span-9 col-start-4 sm:col-span-4 sm:col-start-7 sm:mt-16",
-  "col-span-10 sm:col-span-5 sm:col-start-2",
-  "col-span-7 col-start-6 sm:col-span-3 sm:col-start-8 sm:mt-20",
-  "col-span-7 sm:col-span-3 sm:col-start-3",
-  "col-span-7 col-start-6 sm:col-span-3 sm:col-start-7 sm:mt-10",
+  // Row 1
+  "col-span-10 sm:col-span-5 sm:col-start-1",
+  "col-span-8 col-start-5 sm:col-span-3 sm:col-start-7 sm:mt-32",
+  "col-span-8 sm:col-span-3 sm:col-start-10 sm:mt-56",
+  // Row 2: the three 9:16 frames
+  "col-span-6 sm:col-span-3 sm:col-start-2",
+  "col-span-6 mt-16 sm:col-span-3 sm:col-start-6 sm:mt-20",
+  "col-span-7 col-start-4 sm:col-span-3 sm:col-start-10 sm:mt-8",
+  // Row 3
+  "col-span-10 col-start-3 sm:col-span-5 sm:col-start-2",
+  "col-span-8 sm:col-span-4 sm:col-start-8 sm:mt-28",
+  // Row 4
+  "col-span-8 col-start-3 sm:col-span-4 sm:col-start-5",
 ];
 
 export default function Photographs() {

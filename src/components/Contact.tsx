@@ -1,7 +1,7 @@
 import { RESUME_URL } from "./Masthead";
 import SectionHeader from "./SectionHeader";
 
-const EMAIL = "dudarrin@umich.edu";
+const EMAIL = "darrindu06@gmail.com";
 
 const links = [
   { label: "GitHub", href: "https://github.com/ddu-56" },

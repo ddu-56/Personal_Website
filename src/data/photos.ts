@@ -13,7 +13,7 @@ export const photographs: Photograph[] = [
   {
     src: "/photos/alpine-lake.jpg",
     frame: "04A",
-    caption: "Alpine lake",
+    caption: "Rachel Lake",
     alt: "Clear turquoise lake edged by a rocky shore and pine forest",
     ratio: "2/3",
   },
