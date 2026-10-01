@@ -1,5 +1,6 @@
 import { RESUME_URL } from "./Masthead";
 import Photo from "./Photo";
+import ScrollHint from "./ScrollHint";
 
 export default function Intro() {
   return (
@@ -55,12 +56,7 @@ export default function Intro() {
         />
       </div>
 
-      <a
-        href="#about"
-        className="eyebrow absolute bottom-6 left-1/2 -translate-x-1/2 text-[10px] text-muted transition-colors hover:text-ink"
-      >
-        Scroll down ↓
-      </a>
+      <ScrollHint />
     </section>
   );
 }
