@@ -4,14 +4,14 @@ import ScrollHint from "./ScrollHint";
 
 export default function Intro() {
   return (
-    // Fills the first screen (minus the masthead); text left, photo right,
-    // kept to roughly 60% of the width and centred.
+    // Fills the first screen (minus the masthead). Desktop: text left, photo
+    // right, kept to roughly 60% of the width. Phones: photo stacked on top.
     <section
       id="top"
-      className="wrap relative flex min-h-[calc(100svh-3rem)] items-center py-16"
+      className="wrap relative flex min-h-[calc(100svh-3rem)] items-center py-10 sm:py-16"
     >
-      <div className="mx-auto grid w-full max-w-4xl grid-cols-12 items-center gap-x-10 gap-y-10">
-        <div className="col-span-12 sm:col-span-7">
+      <div className="mx-auto grid w-full max-w-4xl grid-cols-1 items-center gap-y-8 sm:grid-cols-12 sm:gap-x-10">
+        <div className="sm:col-span-7">
           <p className="eyebrow text-muted">
             Computer Science · University of Michigan
           </p>
@@ -46,13 +46,13 @@ export default function Intro() {
         </div>
 
         <Photo
-          className="col-span-8 col-start-3 sm:col-span-5 sm:col-start-8"
+          className="order-first w-36 sm:order-none sm:col-span-5 sm:col-start-8 sm:w-auto"
           src="/photos/headshot.jpg"
           ratio="4/5"
           alt="Portrait of Darrin Du"
           note="Portrait"
           frame="person · 0.99"
-          sizes="(min-width: 640px) 30vw, 70vw"
+          sizes="(min-width: 640px) 30vw, 150px"
         />
       </div>
 
