@@ -14,10 +14,10 @@ const LAYOUT = [
 
 export default function Photographs() {
   return (
-    <section id="photographs" className="wrap py-24 sm:py-32">
-      <SectionHeader index="03" kicker="Photographs" title="Kept frames" />
+    <section id="photographs" className="wrap py-12 sm:py-16">
+      <SectionHeader index="04" kicker="Photographs" title="Kept frames" />
 
-      <div className="mt-16 grid grid-cols-12 gap-x-6 gap-y-10 sm:gap-y-12">
+      <div className="mt-10 grid grid-cols-12 gap-x-6 gap-y-10 sm:gap-y-12">
         {photographs.map((photo, i) => (
           <Photo
             key={photo.frame}

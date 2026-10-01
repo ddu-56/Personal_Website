@@ -11,10 +11,10 @@ const links = [
 
 export default function Contact() {
   return (
-    <section id="contact" className="wrap pt-24 pb-10 sm:pt-32">
+    <section id="contact" className="wrap pt-12 pb-10 sm:pt-16">
       <SectionHeader index="06" kicker="Contact" title="Say hello" />
 
-      <div className="mt-16 grid grid-cols-12 gap-x-6 gap-y-10">
+      <div className="mt-10 grid grid-cols-12 gap-x-6 gap-y-10">
         <div className="col-span-12 sm:col-span-9 sm:col-start-4">
           <a
             href={`mailto:${EMAIL}`}

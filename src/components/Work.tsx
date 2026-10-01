@@ -4,15 +4,15 @@ import SectionHeader from "./SectionHeader";
 
 export default function Work() {
   return (
-    <section id="work" className="wrap py-24 sm:py-32">
-      <SectionHeader index="02" kicker="Selected work" title="Things I’ve built" />
+    <section id="work" className="wrap py-12 sm:py-16">
+      <SectionHeader index="03" kicker="Selected work" title="Things I’ve built" />
 
-      <ol className="mt-16 border-b border-rule">
+      <ol className="mt-10 border-b border-rule">
         {projects.map((project, i) => (
           <li key={project.title} className="border-t border-rule">
             <article
               data-frame={`${project.label} · ${(0.98 - i * 0.03).toFixed(2)}`}
-              className="grid grid-cols-12 gap-x-6 gap-y-4 py-8 sm:py-10"
+              className="grid grid-cols-12 gap-x-6 gap-y-4 py-6 sm:py-8"
             >
               <span className="eyebrow col-span-2 pt-2 text-muted sm:col-span-1">
                 {String(i + 1).padStart(2, "0")}

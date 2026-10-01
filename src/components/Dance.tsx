@@ -4,17 +4,17 @@ import SectionHeader from "./SectionHeader";
 
 export default function Dance() {
   return (
-    <section id="dance" className="wrap py-24 sm:py-32">
-      <SectionHeader index="04" kicker="Dance" title="On the count" />
+    <section id="dance" className="wrap py-12 sm:py-16">
+      <SectionHeader index="05" kicker="Dance" title="On the count" />
 
-      <div className="mt-16 grid grid-cols-12 gap-x-6">
+      <div className="mt-10 grid grid-cols-12 gap-x-6">
         <Photo
           className="col-span-12 lg:col-span-7"
           src="/photos/dance-team.jpg"
           ratio="4/3"
           alt="Darrin and dance team posing on stage in matching jackets after a show"
           note="Dance — performance or practice"
-          caption="Fig. 2 — Hip-hop"
+          caption="Fig. 3 — Hip-hop"
           frame="dancer · 0.97"
           groove
           sizes="(min-width: 1024px) 58vw, 100vw"

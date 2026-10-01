@@ -17,22 +17,22 @@ const notes = [
 
 export default function About() {
   return (
-    <section id="about" className="wrap py-24 sm:py-32">
-      <SectionHeader index="05" kicker="About" title="A little more" />
+    <section id="about" className="wrap py-12 sm:py-16">
+      <SectionHeader index="01" kicker="About" title="A little more" />
 
-      <div className="mt-16 grid grid-cols-12 gap-x-6 gap-y-12">
+      <div className="mt-10 grid grid-cols-12 gap-x-6 gap-y-12">
         <Photo
           className="col-span-8 sm:col-span-5 lg:col-span-3"
           src="/photos/off-the-clock.jpg"
           ratio="3/4"
           alt="Darrin, seen from behind, looking out over a mountain lake"
           note="Everyday life"
-          caption="Fig. 3 — Off the clock"
+          caption="Fig. 2 — Off the clock"
           frame="person · 0.95"
           sizes="(min-width: 1024px) 25vw, 60vw"
         />
 
-        <div className="col-span-12 space-y-5 text-lg leading-relaxed sm:col-span-7 lg:col-span-5 lg:col-start-5">
+        <div className="col-span-12 space-y-5 text-lg leading-relaxed sm:col-span-7 lg:col-span-6 lg:col-start-4">
           <p>
             I’m a computer science student at the University of Michigan,
             specializing in computer vision and experimenting with what’s

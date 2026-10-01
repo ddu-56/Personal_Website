@@ -4,15 +4,15 @@ import SectionHeader from "./SectionHeader";
 
 export default function Experience() {
   return (
-    <section id="experience" className="wrap py-24 sm:py-32">
-      <SectionHeader index="01" kicker="Experience" title="Where I’ve worked" />
+    <section id="experience" className="wrap py-12 sm:py-16">
+      <SectionHeader index="02" kicker="Experience" title="Where I’ve worked" />
 
-      <ol className="mt-16 border-b border-rule">
+      <ol className="mt-10 border-b border-rule">
         {experience.map((job, i) => (
           <li key={job.org} className="border-t border-rule">
             <article
               data-frame={`${job.label} · ${(0.99 - i * 0.02).toFixed(2)}`}
-              className="grid grid-cols-12 gap-x-6 gap-y-4 py-8 sm:py-10"
+              className="grid grid-cols-12 gap-x-6 gap-y-4 py-6 sm:py-8"
             >
               <span className="eyebrow col-span-2 pt-2 text-muted sm:col-span-1">
                 {String(i + 1).padStart(2, "0")}

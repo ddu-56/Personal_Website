@@ -14,11 +14,11 @@ export default function Home() {
       <Viewfinder />
       <Masthead />
       <Intro />
+      <About />
       <Experience />
       <Work />
       <Photographs />
       <Dance />
-      <About />
       <Contact />
     </main>
   );

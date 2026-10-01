@@ -1,11 +1,11 @@
 export const RESUME_URL = `${process.env.NEXT_PUBLIC_BASE_PATH}/images/Darrin_Du_Resume(1).pdf`;
 
 const nav = [
+  { label: "About", href: "#about" },
   { label: "Experience", href: "#experience" },
   { label: "Work", href: "#work" },
   { label: "Photographs", href: "#photographs" },
   { label: "Dance", href: "#dance" },
-  { label: "About", href: "#about" },
 ];
 
 export default function Masthead() {
