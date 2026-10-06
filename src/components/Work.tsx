@@ -4,12 +4,12 @@ import SectionHeader from "./SectionHeader";
 
 export default function Work() {
   return (
-    <section id="work" className="wrap py-12 sm:py-16">
+    <section id="work" className="wrap section-y">
       <SectionHeader index="03" kicker="Selected work" title="Things I’ve built" />
 
-      <ol className="mt-10 border-b border-rule">
+      <ol className="mt-(--space-stack) border-b border-rule">
         {projects.map((project, i) => (
-          <li key={project.title} className="border-t border-rule">
+          <li key={project.title} data-reveal className="border-t border-rule">
             <article
               data-frame={`${project.label} · ${(0.98 - i * 0.03).toFixed(2)}`}
               className="grid grid-cols-12 gap-x-6 gap-y-4 py-6 sm:py-8"

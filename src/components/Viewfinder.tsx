@@ -15,7 +15,10 @@ type Box = { x: number; y: number; w: number; h: number };
 
 const PAD = 10; // breathing room between subject and brackets
 const ARM = 14; // bracket arm length, matches .vf-corner size
-const INTRO_MS = 500; // brackets hold the full viewport this long on load
+// Brackets hold the full viewport this long on load: through the hero's
+// opening (see Intro.tsx), so they lock onto the portrait as it finishes.
+const INTRO_MS = 1500;
+const INTRO_REDUCED_MS = 500;
 const FOCUS_LINE = 0.45; // fraction of viewport height the frame hunts for
 
 const CORNERS = [
@@ -39,6 +42,8 @@ export default function Viewfinder() {
 
     let ready = false;
     let raf = 0;
+    // Subjects don't change after mount; look them up once, not every scroll.
+    const subjects = [...document.querySelectorAll<HTMLElement>("[data-frame]")];
 
     // Boxes live in the layer's coordinates, so they scroll with the page and
     // only animate when the subject changes.
@@ -85,7 +90,7 @@ export default function Viewfinder() {
 
       let best: HTMLElement | null = null;
       let bestDist = Infinity;
-      for (const el of document.querySelectorAll<HTMLElement>("[data-frame]")) {
+      for (const el of subjects) {
         const r = el.getBoundingClientRect();
         if (r.bottom < 0 || r.top > window.innerHeight) continue;
         const dist = covers(r)
@@ -114,15 +119,18 @@ export default function Viewfinder() {
 
     // Open wide on the whole viewport, then snap onto the first subject.
     const openRaf = requestAnimationFrame(() => setBox(viewportBox()));
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const intro = window.setTimeout(() => {
       ready = true;
       pick();
-    }, INTRO_MS);
+    }, reduced ? INTRO_REDUCED_MS : INTRO_MS);
 
     const resizeObserver = new ResizeObserver(remeasure);
     resizeObserver.observe(document.body);
     window.addEventListener("scroll", schedulePick, { passive: true });
     window.addEventListener("resize", schedulePick);
+    // Fired by scroll reveals once a subject stops moving.
+    window.addEventListener("viewfinder:remeasure", remeasure);
 
     return () => {
       cancelAnimationFrame(openRaf);
@@ -131,6 +139,7 @@ export default function Viewfinder() {
       resizeObserver.disconnect();
       window.removeEventListener("scroll", schedulePick);
       window.removeEventListener("resize", schedulePick);
+      window.removeEventListener("viewfinder:remeasure", remeasure);
     };
   }, []);
 

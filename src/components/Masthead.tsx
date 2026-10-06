@@ -10,7 +10,7 @@ const nav = [
 
 export default function Masthead() {
   return (
-    <header className="wrap eyebrow flex flex-col gap-3 pt-6 sm:flex-row sm:items-baseline sm:justify-between">
+    <header data-intro="nav" className="wrap eyebrow flex flex-col gap-3 pt-6 sm:flex-row sm:items-baseline sm:justify-between">
       <a href="#top" className="text-ink">
         Darrin Du
       </a>

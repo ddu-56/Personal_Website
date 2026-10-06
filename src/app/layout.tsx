@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Mono, Instrument_Sans, Instrument_Serif } from "next/font/google";
+import ServiceWorker from "@/components/ServiceWorker";
 import "./globals.css";
 
 const serif = Instrument_Serif({
@@ -27,6 +28,15 @@ const title = "Darrin Du";
 const description =
   "Computer vision student at the University of Michigan. Hip-hop dancer and photographer.";
 
+const LITE_CHECK = `(() => {
+  const html = document.documentElement;
+  html.classList.replace("js-off", "js");
+  const n = navigator;
+  let lite = n.connection?.saveData || n.deviceMemory <= 2 || n.hardwareConcurrency <= 2;
+  try { lite ||= sessionStorage.getItem("lite") === "1"; } catch {}
+  if (lite) html.classList.add("lite");
+})()`;
+
 export const metadata: Metadata = {
   title,
   description,
@@ -49,11 +59,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    // The inline script tags <html> before first paint, so animated pieces can
+    // start hidden without hiding anything from visitors who have JS off. It
+    // also marks weak or data-saving devices "lite" (see ContactSheet.tsx).
+    <html lang="en" className="js-off" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: LITE_CHECK,
+          }}
+        />
+      </head>
       <body
         className={`${serif.variable} ${sans.variable} ${mono.variable} antialiased`}
       >
         {children}
+        <ServiceWorker />
       </body>
     </html>
   );

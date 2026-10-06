@@ -4,10 +4,10 @@ import SectionHeader from "./SectionHeader";
 
 export default function Dance() {
   return (
-    <section id="dance" className="wrap py-12 sm:py-16">
+    <section id="dance" className="wrap section-y">
       <SectionHeader index="05" kicker="Dance" title="On the count" />
 
-      <div className="mt-10 grid grid-cols-12 gap-x-6">
+      <div className="mt-(--space-stack) grid grid-cols-12 gap-x-6">
         <Photo
           className="col-span-12 lg:col-span-7"
           src="/photos/dance-team.jpg"
@@ -17,15 +17,16 @@ export default function Dance() {
           caption="Fig. 3 — Hip-hop"
           frame="dancer · 0.97"
           groove
+          reveal
           sizes="(min-width: 1024px) 58vw, 100vw"
         />
 
-        <div className="col-span-12 mt-12 flex flex-col justify-center gap-8 lg:col-span-4 lg:col-start-9 lg:mt-0">
+        <div data-reveal className="col-span-12 mt-12 flex flex-col justify-center gap-8 lg:col-span-4 lg:col-start-9 lg:mt-0">
           <Counts />
           <div>
             <p className="font-serif text-3xl leading-snug">
-              Hip-hop taught me most of what I know about practice: if you need
-              help ask, and if you still struggle just keep practicing.
+              Hip-hop taught me a lot about growth: ask for help when you need
+              it, and when things still don’t click, keep showing up.
             </p>
             <p className="mt-6 text-[15px] leading-relaxed text-ink/80">
               I dance hip-hop choreography in classes, practice rooms, and on

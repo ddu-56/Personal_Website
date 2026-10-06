@@ -13,10 +13,10 @@ const notes = [
 
 export default function About() {
   return (
-    <section id="about" className="wrap py-12 sm:py-16">
+    <section id="about" className="wrap section-y">
       <SectionHeader index="01" kicker="About" title="A little more" centered />
 
-      <div className="mt-10 grid grid-cols-12 gap-x-6 gap-y-12">
+      <div className="mt-(--space-stack) grid grid-cols-12 gap-x-6 gap-y-12">
         <Photo
           className="col-span-8 sm:col-span-5 lg:col-span-3"
           src="/photos/off-the-clock.jpg"
@@ -25,10 +25,11 @@ export default function About() {
           note="Everyday life"
           caption="Fig. 2 — Off the clock"
           frame="person · 0.95"
+          reveal
           sizes="(min-width: 1024px) 25vw, 60vw"
         />
 
-        <div className="col-span-12 space-y-5 text-lg leading-relaxed sm:col-span-7 lg:col-span-6 lg:col-start-4">
+        <div data-reveal className="col-span-12 space-y-5 text-lg leading-relaxed sm:col-span-7 lg:col-span-6 lg:col-start-4">
           <p>
             I’m a computer science student at the University of Michigan,
             specializing in computer vision and experimenting with what’s
@@ -50,7 +51,7 @@ export default function About() {
           </p>
         </div>
 
-        <dl className="col-span-12 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-rule pt-6 lg:col-span-3 lg:col-start-10 lg:grid-cols-1 lg:border-t-0 lg:pt-1">
+        <dl data-reveal className="col-span-12 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-rule pt-6 lg:col-span-3 lg:col-start-10 lg:grid-cols-1 lg:border-t-0 lg:pt-1">
           {notes.map((note) => (
             <div key={note.label}>
               <dt className="eyebrow text-[10px] text-muted">{note.label}</dt>

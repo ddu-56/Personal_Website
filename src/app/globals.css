@@ -18,6 +18,14 @@
   /* How long the viewfinder takes to travel to a new subject. */
   --lock-ms: 620ms;
   --ease-snap: cubic-bezier(0.76, 0, 0.24, 1);
+
+  /* Spacing rhythm. Sections pad by --space-section top and bottom, so two
+     sections sit 2x apart; a section header sits --space-stack above its
+     content. Keep page spacing on these rather than one-off margins. */
+  --space-section: clamp(3rem, 2rem + 3vw, 4.5rem);
+  --space-stack: clamp(2.5rem, 2rem + 1vw, 3rem);
+  /* Height of a contact-sheet strip; the hero pads around it. */
+  --sheet-h: clamp(5.5rem, 15svh, 9.5rem);
 }
 
 html {
@@ -47,6 +55,10 @@ body {
   @media (width >= 64rem) {
     padding-inline: 3rem;
   }
+}
+
+@utility section-y {
+  padding-block: var(--space-section);
 }
 
 @utility eyebrow {
@@ -135,6 +147,143 @@ body {
   }
   to {
     opacity: 1;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Contact sheet: the landing page's drifting background strips. Frames are
+   kept faint and gray under a paper wash; the strips fade out at the edges
+   and around the hero copy, so the text never sits on a busy photo.
+--------------------------------------------------------------------------- */
+
+.contact-sheet {
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
+}
+
+/* Paper wash over the middle of the hero, under the copy and headshot. */
+.contact-sheet::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 52% 34% at 50% 50%,
+    var(--color-paper) 60%,
+    transparent 100%
+  );
+}
+
+.sheet-row {
+  position: absolute;
+  left: 0;
+  display: flex;
+  width: max-content;
+  height: var(--sheet-h);
+  animation: sheet-drift 140s linear infinite;
+  will-change: transform;
+}
+
+/* Off screen, or a background tab: hold still. */
+.is-paused .sheet-row {
+  animation-play-state: paused;
+}
+
+/* Low-power devices (see ContactSheet.tsx and layout.tsx): no drift at all. */
+.lite .sheet-row {
+  animation: none;
+}
+
+/* Phones get one strip, under the copy; the headshot sits up top. */
+@media (width < 40rem) {
+  .sheet-top {
+    display: none;
+  }
+}
+
+.sheet-right {
+  animation-direction: reverse;
+  animation-duration: 170s;
+}
+
+.sheet-frame {
+  position: relative;
+  height: 100%;
+  /* A trailing margin rather than flex gap, so the two copies are exactly
+     equal halves and the -50% loop has no seam. */
+  margin-right: 0.75rem;
+}
+
+.sheet-frame img {
+  display: block;
+  height: 100%;
+  width: auto;
+  opacity: 0.18;
+}
+
+.sheet-box {
+  position: absolute;
+  border: 1px solid color-mix(in oklab, var(--color-ink) 55%, transparent);
+  opacity: 0;
+  transform: scale(1.08);
+  transition:
+    opacity 360ms ease-out,
+    transform var(--lock-ms) var(--ease-snap);
+}
+
+.sheet-box.is-on {
+  opacity: 1;
+  transform: none;
+}
+
+.sheet-box > span {
+  position: absolute;
+  bottom: 100%;
+  left: -1px;
+  padding: 2px 4px;
+  background: color-mix(in oklab, var(--color-ink) 70%, transparent);
+  color: var(--color-paper);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+@keyframes sheet-drift {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Entrances. With JS on, hero cues ([data-intro]), scroll reveals
+   ([data-reveal]) and FoldText pieces start hidden; GSAP brings them in
+   (Hero.tsx, Reveals.tsx, FoldText.tsx). Reduced motion shows them as-is.
+--------------------------------------------------------------------------- */
+
+.fold-text-segment {
+  display: inline-block;
+  perspective: 700px;
+  transform-style: preserve-3d;
+}
+
+.fold-text-piece {
+  display: inline-block;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.js [data-intro],
+.js [data-reveal],
+.js .fold-text-piece {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-intro],
+  .js [data-reveal],
+  .js .fold-text-piece {
+    opacity: 1 !important;
   }
 }
 

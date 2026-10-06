@@ -49,8 +49,14 @@ const nextConfig: NextConfig = {
   // Static HTML export for GitHub Pages, which has no Node server.
   output: "export",
   basePath,
-  // next/image can't resize on a static host; photos in /public are pre-sized.
-  images: { unoptimized: true },
+  // A static host can't resize on request, so scripts/images.mjs pre-sizes
+  // every photo and this loader points each srcset entry at the right copy.
+  images: {
+    loader: "custom",
+    loaderFile: "./src/lib/image-loader.ts",
+    deviceSizes: [480, 800, 1200, 1600],
+    imageSizes: [],
+  },
   env: { NEXT_PUBLIC_BASE_PATH: basePath },
   // Only applies to `next dev`/`next start`; GitHub Pages can't set headers.
   async headers() {

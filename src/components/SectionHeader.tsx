@@ -1,3 +1,5 @@
+import FoldText from "./FoldText";
+
 export default function SectionHeader({
   index,
   kicker,
@@ -12,15 +14,15 @@ export default function SectionHeader({
 }) {
   return (
     <header className="grid grid-cols-12 gap-x-6 border-t border-rule pt-5">
-      <p className="eyebrow col-span-12 text-muted sm:col-span-3">
+      <p data-reveal className="eyebrow col-span-12 text-muted sm:col-span-3">
         {index} — {kicker}
       </p>
       <h2
-        className={`col-span-12 mt-8 font-serif text-5xl leading-[0.95] tracking-tight sm:text-7xl ${
+        className={`col-span-12 mt-4 font-serif text-5xl leading-[0.95] tracking-tight sm:text-7xl ${
           centered ? "text-center" : "sm:col-span-9 sm:mt-0"
         }`}
       >
-        {title}
+        <FoldText text={title} splitBy="word" trigger="scroll" stagger={0.08} />
       </h2>
     </header>
   );

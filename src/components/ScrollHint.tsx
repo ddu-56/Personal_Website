@@ -22,7 +22,11 @@ export default function ScrollHint() {
         hidden ? "pointer-events-none opacity-0" : "opacity-100"
       }`}
     >
-      Scroll down ↓
+      {/* Inner span carries the opening's fade, so it can't fight the
+          scroll-driven opacity on the link itself. */}
+      <span data-intro="hint" className="inline-block">
+        Scroll down ↓
+      </span>
     </a>
   );
 }

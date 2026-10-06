@@ -11,6 +11,12 @@ interface PhotoProps {
   /** Viewfinder label. Setting it makes this photo a frame target. */
   frame?: string;
   groove?: boolean;
+  /** Fade up on scroll (see Reveals.tsx). */
+  reveal?: boolean;
+  /** Cue in the hero's opening (see Hero.tsx). */
+  intro?: string;
+  /** Load first, ahead of everything else (the first-screen photo only). */
+  preload?: boolean;
   sizes?: string;
   className?: string;
 }
@@ -23,11 +29,18 @@ export default function Photo({
   caption,
   frame,
   groove,
+  reveal,
+  intro,
+  preload,
   sizes = "(min-width: 1024px) 50vw, 100vw",
   className,
 }: PhotoProps) {
   return (
-    <figure className={className}>
+    <figure
+      className={className}
+      data-reveal={reveal ? "" : undefined}
+      data-intro={intro}
+    >
       <div
         data-frame={frame}
         data-frame-groove={groove ? "" : undefined}
@@ -40,6 +53,8 @@ export default function Photo({
             alt={alt}
             fill
             sizes={sizes}
+            preload={preload}
+            fetchPriority={preload ? "high" : undefined}
             className="object-cover"
           />
         ) : (
