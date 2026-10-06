@@ -15,10 +15,9 @@ type Box = { x: number; y: number; w: number; h: number };
 
 const PAD = 10; // breathing room between subject and brackets
 const ARM = 14; // bracket arm length, matches .vf-corner size
-// Brackets hold the full viewport this long on load: through the hero's
-// opening (see Intro.tsx), so they lock onto the portrait as it finishes.
-const INTRO_MS = 1500;
-const INTRO_REDUCED_MS = 500;
+// Brackets hold the full viewport through the hero's opening and lock on when
+// Hero.tsx fires "viewfinder:start" (the shutter is open). Failsafe if not.
+const START_FALLBACK_MS = 3000;
 const FOCUS_LINE = 0.45; // fraction of viewport height the frame hunts for
 
 const CORNERS = [
@@ -119,11 +118,13 @@ export default function Viewfinder() {
 
     // Open wide on the whole viewport, then snap onto the first subject.
     const openRaf = requestAnimationFrame(() => setBox(viewportBox()));
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const intro = window.setTimeout(() => {
+    const start = () => {
+      if (ready) return;
       ready = true;
       pick();
-    }, reduced ? INTRO_REDUCED_MS : INTRO_MS);
+    };
+    const intro = window.setTimeout(start, START_FALLBACK_MS);
+    window.addEventListener("viewfinder:start", start);
 
     const resizeObserver = new ResizeObserver(remeasure);
     resizeObserver.observe(document.body);
@@ -140,6 +141,7 @@ export default function Viewfinder() {
       window.removeEventListener("scroll", schedulePick);
       window.removeEventListener("resize", schedulePick);
       window.removeEventListener("viewfinder:remeasure", remeasure);
+      window.removeEventListener("viewfinder:start", start);
     };
   }, []);
 

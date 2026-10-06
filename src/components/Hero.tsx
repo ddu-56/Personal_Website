@@ -1,26 +1,22 @@
 "use client";
 
 import { useEffect, useRef, type ReactNode } from "react";
-import { gsap } from "gsap";
 
 /**
- * Wraps the first screen (masthead + intro) and plays its opening, a camera
+ * Wraps the first screen (masthead + intro) and starts its opening, a camera
  * coming up: the strips surface, the nav and copy settle in, the portrait
  * opens like a shutter, and the viewfinder (held wide until then) locks on.
  *
- * Pieces opt in with `data-intro="<cue>"` and start hidden in CSS. The name
- * and tagline are FoldText, which times itself with a `delay` against this.
+ * The motion itself is CSS (the "Entrances" block in globals.css), keyed off
+ * `.intro-in` on this wrapper and each piece's `data-intro` cue. This only
+ * decides when to start: once the portrait has decoded and the fonts are in,
+ * so the shutter opens on a real photo and the name never re-flows mid-fold.
  */
 
-// Seconds from load. Name folds in at 0.3, tagline at 0.75 (see Intro.tsx).
-const CUES: Record<string, number> = {
-  sheet: 0,
-  nav: 0.1,
-  eyebrow: 0.2,
-  photo: 0.35,
-  body: 1.0,
-  hint: 1.5,
-};
+// Don't hold the opening longer than this waiting on the photo and fonts.
+const MAX_WAIT_MS = 800;
+// When the shutter is fully open (its delay + duration in globals.css).
+const SHUTTER_OPEN_MS = 1450;
 
 export default function Hero({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -28,42 +24,29 @@ export default function Hero({ children }: { children: ReactNode }) {
   useEffect(() => {
     const root = ref.current;
     if (!root) return;
-    const all = root.querySelectorAll<HTMLElement>("[data-intro]");
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      gsap.set(all, { opacity: 1 });
-      return;
-    }
+    // Tells the inline failsafe in layout.tsx that motion is in hand.
+    document.documentElement.classList.add("motion-ready");
 
-    const cue = (name: string) =>
-      root.querySelectorAll<HTMLElement>(`[data-intro="${name}"]`);
-    const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
+    const photo = root.querySelector<HTMLImageElement>('[data-intro="photo"] img');
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let cancelled = false;
+    let lock = 0;
 
-    tl.to(cue("sheet"), { opacity: 1, duration: 1.6, ease: "power1.out" }, CUES.sheet);
-    for (const name of ["nav", "eyebrow", "body", "hint"]) {
-      tl.fromTo(
-        cue(name),
-        { opacity: 0, y: 12 },
-        { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, clearProps: "transform" },
-        CUES[name]
+    Promise.race([
+      Promise.all([document.fonts?.ready, photo?.decode().catch(() => {})]),
+      new Promise((r) => setTimeout(r, MAX_WAIT_MS)),
+    ]).then(() => {
+      if (cancelled) return;
+      root.classList.add("intro-in");
+      lock = window.setTimeout(
+        () => window.dispatchEvent(new Event("viewfinder:start")),
+        reduced ? 0 : SHUTTER_OPEN_MS
       );
-    }
-
-    // The portrait opens from a horizontal slit while the image settles.
-    const photo = cue("photo");
-    tl.fromTo(
-      photo,
-      { opacity: 1, clipPath: "inset(50% 0% 50% 0%)" },
-      { clipPath: "inset(0% 0% 0% 0%)", duration: 1.1, ease: "power3.inOut", clearProps: "clipPath" },
-      CUES.photo
-    ).fromTo(
-      [...photo].flatMap((el) => [...el.querySelectorAll("img")]),
-      { scale: 1.15 },
-      { scale: 1, duration: 1.6, ease: "power3.out", clearProps: "transform" },
-      CUES.photo
-    );
+    });
 
     return () => {
-      tl.kill();
+      cancelled = true;
+      window.clearTimeout(lock);
     };
   }, []);
 

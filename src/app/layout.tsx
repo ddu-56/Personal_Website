@@ -20,7 +20,7 @@ const sans = Instrument_Sans({
 const mono = IBM_Plex_Mono({
   variable: "--font-plex-mono",
   subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: "400",
   display: "swap",
 });
 
@@ -28,13 +28,18 @@ const title = "Darrin Du";
 const description =
   "Computer vision student at the University of Michigan. Hip-hop dancer and photographer.";
 
-const LITE_CHECK = `(() => {
+const BOOT_SCRIPT = `(() => {
   const html = document.documentElement;
   html.classList.replace("js-off", "js");
   const n = navigator;
-  let lite = n.connection?.saveData || n.deviceMemory <= 2 || n.hardwareConcurrency <= 2;
-  try { lite ||= sessionStorage.getItem("lite") === "1"; } catch {}
-  if (lite) html.classList.add("lite");
+  if (n.connection?.saveData || n.deviceMemory <= 2 || n.hardwareConcurrency <= 2) {
+    html.classList.add("lite");
+  }
+  // Failsafe: if the app's JS hasn't started in 4s (blocked, slow, broken),
+  // drop the hidden starting states so the page is simply shown.
+  setTimeout(() => {
+    if (!html.classList.contains("motion-ready")) html.classList.replace("js", "js-off");
+  }, 4000);
 })()`;
 
 export const metadata: Metadata = {
@@ -61,17 +66,20 @@ export default function RootLayout({
   return (
     // The inline script tags <html> before first paint, so animated pieces can
     // start hidden without hiding anything from visitors who have JS off. It
-    // also marks weak or data-saving devices "lite" (see ContactSheet.tsx).
+    // also marks weak or data-saving devices "lite" (still background strips).
     <html lang="en" className="js-off" suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: LITE_CHECK,
+            __html: BOOT_SCRIPT,
           }}
         />
       </head>
+      {/* Extensions like Grammarly stamp attributes onto <body> before React
+          loads; ignore those rather than report a mismatch. */}
       <body
         className={`${serif.variable} ${sans.variable} ${mono.variable} antialiased`}
+        suppressHydrationWarning
       >
         {children}
         <ServiceWorker />

@@ -1,17 +1,21 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { photographs, type Photograph } from "@/data/photos";
 import { BEAT_MS } from "@/lib/beat";
 
 /**
  * The landing page's background: two faint strips of the kept frames drifting
  * in opposite directions, like a contact sheet sliding under a loupe. Every
- * bar (four beats) a quiet detection box settles on one frame in view. It's
+ * two bars a quiet detection box settles on one frame in view. It's
  * deliberately ink, not signal red, so the viewfinder stays the subject.
+ *
+ * Kept cheap: the drift is one CSS transform per strip (GPU, no JS per
+ * frame), it pauses off screen and in background tabs, and the boxes are a
+ * class flip on one element every few seconds, never a React re-render.
  */
 
-const SWAP_MS = BEAT_MS * 4;
+const SWAP_MS = BEAT_MS * 8;
 // Copies of the set per strip. Must be even (the loop shifts by half), and
 // half must outrun a wide monitor: one set is only ~1000px at full height.
 const COPIES = 6;
@@ -28,27 +32,18 @@ const thumb = (src: string) =>
     "/photos/_sized/thumbs/$1.webp"
   )}`;
 
-// If the page can't hold this frame rate once the opening has settled, the
-// device drops to "lite": strips hold still (see .lite in globals.css). It
-// takes two slow readings, so one hiccup (an image decoding) doesn't count.
-// The verdict lasts the session, and layout.tsx applies it before first paint.
-const LITE_FPS = 40;
-const PROBES_AT_MS = [2500, 6000];
-const PROBE_FOR_MS = 1000;
-
-const isLite = () => document.documentElement.classList.contains("lite");
-
 export default function ContactSheet() {
   const ref = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState<string | null>(null);
 
   useEffect(() => {
     const root = ref.current;
     if (!root || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // Weak or data-saving devices (flagged in layout.tsx) get still strips.
+    if (document.documentElement.classList.contains("lite")) return;
 
     // Only animate while the hero is on screen and the tab is visible.
     let inView = true;
-    const running = () => inView && !document.hidden && !isLite();
+    const running = () => inView && !document.hidden;
     const sync = () => root.classList.toggle("is-paused", !running());
     const observer = new IntersectionObserver(([entry]) => {
       inView = entry.isIntersecting;
@@ -57,53 +52,28 @@ export default function ContactSheet() {
     observer.observe(root);
     document.addEventListener("visibilitychange", sync);
 
-    // Only frames fully on screen (and clear of the faded edges) qualify.
+    const frames = [...root.querySelectorAll<HTMLElement>(".sheet-frame.has-box")];
+    let active: HTMLElement | null = null;
+
+    // Move the box to a random frame fully on screen (clear of the faded edges).
     const pick = () => {
       if (!running()) return;
       const w = window.innerWidth;
-      const visible = [
-        ...root.querySelectorAll<HTMLElement>("[data-sheet-id]"),
-      ].filter((el) => {
+      const options = frames.filter((el) => {
+        if (el === active) return false;
         const r = el.getBoundingClientRect();
-        return r.width > 0 && r.left > w * 0.12 && r.right < w * 0.88;
+        return r.left > w * 0.14 && r.right < w * 0.86;
       });
-      setActive((prev) => {
-        const options = visible.filter((el) => el.dataset.sheetId !== prev);
-        if (!options.length) return null;
-        return options[Math.floor(Math.random() * options.length)].dataset.sheetId!;
-      });
+      active?.classList.remove("is-on");
+      active = options[Math.floor(Math.random() * options.length)] ?? null;
+      active?.classList.add("is-on");
     };
 
-    let raf = 0;
-    let slow = 0;
-    const probe = () => {
-      if (!running()) return;
-      let frames = 0;
-      const start = performance.now();
-      const tick = (now: number) => {
-        frames++;
-        if (now - start < PROBE_FOR_MS) {
-          raf = requestAnimationFrame(tick);
-        } else if ((frames * 1000) / (now - start) < LITE_FPS && ++slow === PROBES_AT_MS.length) {
-          document.documentElement.classList.add("lite");
-          setActive(null);
-          sync();
-          try {
-            sessionStorage.setItem("lite", "1");
-          } catch {}
-        }
-      };
-      raf = requestAnimationFrame(tick);
-    };
-
-    const first = window.setTimeout(pick, 1200);
+    const first = window.setTimeout(pick, 1800);
     const loop = window.setInterval(pick, SWAP_MS);
-    const probeTimers = PROBES_AT_MS.map((ms) => window.setTimeout(probe, ms));
     return () => {
       window.clearTimeout(first);
       window.clearInterval(loop);
-      probeTimers.forEach((t) => window.clearTimeout(t));
-      cancelAnimationFrame(raf);
       observer.disconnect();
       document.removeEventListener("visibilitychange", sync);
     };
@@ -119,12 +89,7 @@ export default function ContactSheet() {
           {/* Repeated copies, so translating by -50% loops seamlessly. */}
           {Array.from({ length: COPIES }, (_, copy) =>
             row.photos.map((photo) => (
-              <Frame
-                key={`${copy}-${photo.frame}`}
-                id={`${r}-${copy}-${photo.frame}`}
-                photo={photo}
-                active={active === `${r}-${copy}-${photo.frame}`}
-              />
+              <Frame key={`${copy}-${photo.frame}`} photo={photo} />
             ))
           )}
         </div>
@@ -133,18 +98,18 @@ export default function ContactSheet() {
   );
 }
 
-function Frame({ id, photo, active }: { id: string; photo: Photograph; active: boolean }) {
+function Frame({ photo }: { photo: Photograph }) {
   if (!photo.src) return null;
   const [x, y, w, h] = photo.detect?.box ?? [0, 0, 0, 0];
 
   return (
-    <div data-sheet-id={photo.detect ? id : undefined} className="sheet-frame">
+    <div className={photo.detect ? "sheet-frame has-box" : "sheet-frame"}>
       {/* Natural size, so the detection box percentages line up with the photo. */}
       {/* eslint-disable-next-line @next/next/no-img-element -- tiny pre-sized thumbs on a static host */}
       <img src={thumb(photo.src)} alt="" decoding="async" />
       {photo.detect && (
         <div
-          className={`sheet-box ${active ? "is-on" : ""}`}
+          className="sheet-box"
           style={{ left: `${x}%`, top: `${y}%`, width: `${w}%`, height: `${h}%` }}
         >
           <span>

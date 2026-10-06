@@ -1,44 +1,39 @@
 "use client";
 
 import { useEffect } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 /**
- * Fades every `[data-reveal]` element up into place as it nears the viewport,
- * staggering ones that arrive together. They start hidden in CSS so nothing
- * flashes before this runs. Renders nothing; mount it once per page.
+ * Marks each `[data-reveal]` element `.is-in` as it nears the viewport, which
+ * fades it up (CSS, in globals.css). Ones arriving together are staggered.
+ * Renders nothing; mount it once per page.
  */
+
+const STAGGER_MS = 120;
+
 export default function Reveals() {
   useEffect(() => {
-    const els = gsap.utils.toArray<HTMLElement>("[data-reveal]");
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      gsap.set(els, { opacity: 1 });
-      return;
-    }
+    const remeasure = () => window.dispatchEvent(new Event("viewfinder:remeasure"));
 
-    gsap.set(els, { y: 18 });
-    const triggers = ScrollTrigger.batch(els, {
-      start: "top 90%",
-      // Anything already scrolled past (an anchor link, a reload) still plays.
-      end: "max",
-      once: true,
-      onEnter: (batch) =>
-        gsap.to(batch, {
-          opacity: 1,
-          y: 0,
-          duration: 0.7,
-          stagger: 0.08,
-          ease: "power2.out",
-          clearProps: "transform",
+    const observer = new IntersectionObserver(
+      (entries) => {
+        let n = 0;
+        for (const { target, isIntersecting, boundingClientRect } of entries) {
+          // Below the fold: wait. Already scrolled past (an anchor link, a
+          // reload): show it now, with no stagger.
+          if (!isIntersecting && boundingClientRect.top > 0) continue;
+          const el = target as HTMLElement;
+          el.style.setProperty("--d", `${isIntersecting ? n++ * STAGGER_MS : 0}ms`);
+          el.classList.add("is-in");
           // The viewfinder may have locked on mid-slide; let it re-measure.
-          onComplete: () => window.dispatchEvent(new Event("viewfinder:remeasure")),
-        }),
-    });
+          el.addEventListener("transitionend", remeasure, { once: true });
+          observer.unobserve(el);
+        }
+      },
+      { rootMargin: "0px 0px -10% 0px" }
+    );
 
-    return () => triggers.forEach((t) => t.kill());
+    document.querySelectorAll("[data-reveal]").forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
   }, []);
 
   return null;

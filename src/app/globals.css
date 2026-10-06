@@ -158,19 +158,24 @@ body {
 
 .contact-sheet {
   overflow: hidden;
-  mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
 }
 
-/* Paper wash over the middle of the hero, under the copy and headshot. */
+/* One static overlay, painted once: paper fading in at both edges, plus a
+   wash over the middle of the hero under the copy and headshot. (A CSS mask
+   would do the edges too, but it's re-composited every frame of the drift.) */
 .contact-sheet::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    ellipse 52% 34% at 50% 50%,
-    var(--color-paper) 60%,
-    transparent 100%
-  );
+  background:
+    linear-gradient(
+      to right,
+      var(--color-paper),
+      transparent 14%,
+      transparent 86%,
+      var(--color-paper)
+    ),
+    radial-gradient(ellipse 52% 34% at 50% 50%, var(--color-paper) 60%, transparent 100%);
 }
 
 .sheet-row {
@@ -188,7 +193,7 @@ body {
   animation-play-state: paused;
 }
 
-/* Low-power devices (see ContactSheet.tsx and layout.tsx): no drift at all. */
+/* Weak or data-saving devices (flagged in layout.tsx): no drift at all. */
 .lite .sheet-row {
   animation: none;
 }
@@ -226,11 +231,12 @@ body {
   opacity: 0;
   transform: scale(1.08);
   transition:
-    opacity 360ms ease-out,
-    transform var(--lock-ms) var(--ease-snap);
+    opacity 700ms ease-out,
+    transform 900ms var(--ease-snap);
 }
 
-.sheet-box.is-on {
+/* ContactSheet.tsx flips .is-on onto one frame at a time. */
+.is-on > .sheet-box {
   opacity: 1;
   transform: none;
 }
@@ -256,34 +262,119 @@ body {
 }
 
 /* ---------------------------------------------------------------------------
-   Entrances. With JS on, hero cues ([data-intro]), scroll reveals
-   ([data-reveal]) and FoldText pieces start hidden; GSAP brings them in
-   (Hero.tsx, Reveals.tsx, FoldText.tsx). Reduced motion shows them as-is.
+   Entrances, all CSS transitions so they run off the main thread and stay
+   smooth while the page is still starting up. With JS on (the .js class from
+   layout.tsx), pieces start hidden and play when an ancestor gets a class:
+     [data-intro="<cue>"]  hero opening, on .intro-in (Hero.tsx)
+     [data-reveal]         scroll fade-up, on .is-in (Reveals.tsx)
+     .fold-text-piece      FoldText, on either of the above
+   --d is a piece's delay: set per cue below, or by Reveals.tsx to stagger.
 --------------------------------------------------------------------------- */
 
-.fold-text-segment {
-  display: inline-block;
-  perspective: 700px;
-  transform-style: preserve-3d;
+:root {
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.js [data-intro],
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 700ms var(--ease-out) var(--d, 0ms),
+    transform 900ms var(--ease-out) var(--d, 0ms);
+}
+
+/* Scroll reveals are slower and travel a touch further than the hero, so
+   the page settles in rather than snapping. */
+.js [data-reveal] {
+  transform: translateY(20px);
+  transition:
+    opacity 1000ms var(--ease-out) var(--d, 0ms),
+    transform 1300ms var(--ease-out) var(--d, 0ms);
+}
+
+.js .intro-in [data-intro],
+.js [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Hero cues, in seconds from the start: a camera coming up. */
+.js [data-intro="sheet"] {
+  transform: none;
+  transition: opacity 1600ms ease-out;
+}
+.js [data-intro="nav"] { --d: 100ms; }
+.js [data-intro="eyebrow"] { --d: 200ms; }
+.js [data-intro="body"] { --d: 1000ms; }
+.js [data-intro="cta"] { --d: 1100ms; }
+.js [data-intro="hint"] { --d: 1500ms; }
+
+/* The portrait opens from a horizontal slit while the image settles.
+   Keep SHUTTER_OPEN_MS in Hero.tsx at this delay + duration. */
+.js [data-intro="photo"] {
+  opacity: 1;
+  transform: none;
+  clip-path: inset(50% 0 50% 0);
+  transition: clip-path 1100ms var(--ease-snap) 350ms;
+}
+.js .intro-in [data-intro="photo"] {
+  clip-path: inset(0);
+}
+.js [data-intro="photo"] img {
+  transform: scale(1.15);
+  transition: transform 1600ms var(--ease-out) 350ms;
+}
+.js .intro-in [data-intro="photo"] img {
+  transform: none;
+}
+
+/* A heading whose words fold in: the heading itself stays put. */
+.js [data-reveal="fold"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* FoldText: pieces share one perspective, so the line reads as one surface
+   folding up off the baseline rather than letters spinning separately. */
+.fold-text-visual {
+  perspective: 600px;
 }
 
 .fold-text-piece {
   display: inline-block;
-  transform-style: preserve-3d;
+  transform-origin: 50% 100%;
   backface-visibility: hidden;
 }
 
-.js [data-intro],
-.js [data-reveal],
 .js .fold-text-piece {
   opacity: 0;
+  transform: translateY(0.12em) rotateX(88deg);
+  transition:
+    opacity 500ms ease-out,
+    transform 1000ms var(--ease-out);
+  transition-delay: calc(var(--fold-delay) + var(--i) * var(--fold-stagger));
+}
+
+/* Section titles fold in a little slower than the hero's name. */
+.js [data-reveal] .fold-text-piece {
+  transition-duration: 700ms, 1300ms;
+}
+
+.js .intro-in .fold-text-piece,
+.js .is-in .fold-text-piece {
+  opacity: 1;
+  transform: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .js [data-intro],
   .js [data-reveal],
-  .js .fold-text-piece {
+  .js .fold-text-piece,
+  .js [data-intro="photo"] img {
     opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
   }
 }
 

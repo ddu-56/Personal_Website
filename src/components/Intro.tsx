@@ -22,15 +22,14 @@ export default function Intro() {
               Computer Science · University of Michigan
             </p>
             <h1 className="mt-4 font-serif text-[clamp(3rem,min(8vw,10svh),6.5rem)] leading-[0.9] tracking-[-0.02em]">
-              <FoldText text="Darrin Du" delay={0.3} />
+              <FoldText text="Darrin Du" delay={300} />
             </h1>
             <p className="mt-4 max-w-[24ch] font-serif text-2xl leading-tight text-balance text-muted italic sm:text-[1.75rem]">
               <FoldText
                 text="studies how machines see, and how people move."
                 splitBy="word"
-                delay={0.75}
-                duration={0.7}
-                stagger={0.05}
+                delay={750}
+                stagger={50}
               />
             </p>
             <p data-intro="body" className="mt-5 max-w-[26rem] text-[15px] text-pretty leading-relaxed text-ink/80">
@@ -39,7 +38,7 @@ export default function Intro() {
               carry a camera most places I go.
             </p>
 
-            <div data-intro="body" className="mt-8 flex flex-wrap gap-3">
+            <div data-intro="cta" className="mt-8 flex flex-wrap gap-3">
               <a
                 href={RESUME_URL}
                 target="_blank"

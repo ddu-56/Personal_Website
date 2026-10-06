@@ -42,7 +42,6 @@ export default function Contact() {
 
       <footer className="eyebrow mt-[calc(var(--space-section)*2)] flex flex-col gap-2 border-t border-rule pt-5 text-[10px] text-muted sm:flex-row sm:justify-between">
         <span>© {new Date().getFullYear()} Darrin Du</span>
-        <span>Set in Instrument Serif, Instrument Sans &amp; IBM Plex Mono</span>
       </footer>
     </section>
   );

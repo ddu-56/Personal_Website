@@ -18,11 +18,12 @@ export default function SectionHeader({
         {index} — {kicker}
       </p>
       <h2
+        data-reveal="fold"
         className={`col-span-12 mt-4 font-serif text-5xl leading-[0.95] tracking-tight sm:text-7xl ${
           centered ? "text-center" : "sm:col-span-9 sm:mt-0"
         }`}
       >
-        <FoldText text={title} splitBy="word" trigger="scroll" stagger={0.08} />
+        <FoldText text={title} splitBy="word" stagger={110} />
       </h2>
     </header>
   );
