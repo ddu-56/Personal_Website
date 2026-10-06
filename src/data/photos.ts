@@ -13,7 +13,8 @@ export interface Photograph {
   detect?: { label: string; score: number; box: [number, number, number, number] };
 }
 
-// Order matters: the gallery layout in Photographs.tsx is positional.
+// Gallery rows are set by frame number in Photographs.tsx (ROWS); this order
+// only drives the landing-page strips.
 export const photographs: Photograph[] = [
   {
     src: "/photos/alpine-lake.jpg",

@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import Image from "next/image";
 
 interface PhotoProps {
@@ -19,6 +20,7 @@ interface PhotoProps {
   preload?: boolean;
   sizes?: string;
   className?: string;
+  style?: CSSProperties;
 }
 
 export default function Photo({
@@ -34,10 +36,12 @@ export default function Photo({
   preload,
   sizes = "(min-width: 1024px) 50vw, 100vw",
   className,
+  style,
 }: PhotoProps) {
   return (
     <figure
       className={className}
+      style={style}
       data-reveal={reveal ? "" : undefined}
       data-intro={intro}
     >

@@ -34,7 +34,9 @@ export default function Intro() {
             </p>
             <p data-intro="body" className="mt-5 max-w-[26rem] text-[15px] text-pretty leading-relaxed text-ink/80">
               Computer science major at the University of Michigan in Ann Arbor,
-              working in computer vision. Away from the desk I dance hip-hop and
+              working in computer vision,{" "}
+              <span className="font-medium text-ink">graduating in 2028</span>.
+              Away from the desk I dance hip-hop and
               carry a camera most places I go.
             </p>
 

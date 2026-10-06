@@ -1,46 +1,64 @@
+import type { CSSProperties } from "react";
 import { photographs } from "@/data/photos";
 import Photo from "./Photo";
 import SectionHeader from "./SectionHeader";
 
-// Deliberately uneven, like prints laid out on a table. One entry per photo.
-// On wider screens the rows run 3 · 3 · 2 · 1: a large print with two smaller
-// ones, a strip of three tall frames, a staggered pair, then one closing frame.
-const LAYOUT = [
-  // Row 1
-  "col-span-10 sm:col-span-5 sm:col-start-1",
-  "col-span-8 col-start-5 sm:col-span-3 sm:col-start-7 sm:mt-32",
-  "col-span-8 sm:col-span-3 sm:col-start-10 sm:mt-56",
-  // Row 2: the three 9:16 frames
-  "col-span-6 sm:col-span-3 sm:col-start-2",
-  "col-span-6 mt-16 sm:col-span-3 sm:col-start-6 sm:mt-20",
-  "col-span-7 col-start-4 sm:col-span-3 sm:col-start-10 sm:mt-8",
-  // Row 3
-  "col-span-10 col-start-3 sm:col-span-5 sm:col-start-2",
-  "col-span-8 sm:col-span-4 sm:col-start-8 sm:mt-28",
-  // Row 4
-  "col-span-8 col-start-3 sm:col-span-4 sm:col-start-5",
+// Laid out like a contact sheet: rows of prints that share one height and
+// together fill the width exactly (see .contact-prints in globals.css). Each
+// print's width follows its aspect ratio, so nothing is cropped to fit a grid.
+//
+// On wide screens the rows are fixed, by frame number, and balanced so both
+// come out about the same height: five tall frames, then four wider ones.
+// Narrower screens ignore the split and simply wrap. A photo added to
+// photos.ts but not listed here joins the last row rather than going missing.
+const ROWS = [
+  ["04A", "15", "11A", "22A", "31"],
+  ["07", "38A", "36", "40"],
 ];
+
+const listed = new Set(ROWS.flat());
+const rows = ROWS.map((row, r) => [
+  ...row.flatMap((frame) => photographs.filter((p) => p.frame === frame)),
+  ...(r === ROWS.length - 1
+    ? photographs.filter((p) => !listed.has(p.frame))
+    : []),
+]);
+
+const ratioOf = (ratio: string) => {
+  const [w, h] = ratio.split("/").map(Number);
+  return w / h;
+};
 
 export default function Photographs() {
   return (
     <section id="photographs" className="wrap section-y">
       <SectionHeader index="04" kicker="Photographs" title="Kept frames" />
 
-      <div className="mt-(--space-stack) grid grid-cols-12 gap-x-6 gap-y-10 sm:gap-y-12">
-        {photographs.map((photo, i) => (
-          <Photo
-            key={photo.frame}
-            className={LAYOUT[i % LAYOUT.length]}
-            src={photo.src}
-            alt={photo.alt}
-            ratio={photo.ratio}
-            note={`Frame ${photo.frame}`}
-            caption={`${photo.frame} — ${photo.caption}`}
-            frame={`frame ${photo.frame}`}
-            reveal
-            sizes="(min-width: 1240px) 480px, (min-width: 640px) 40vw, 80vw"
-          />
-        ))}
+      {/* Wide screens: the sheet is centered on the page and capped in width,
+          so the prints stay the same size however wide the window gets. */}
+      <div className="mt-(--space-stack)">
+        <div className="contact-prints mx-auto lg:max-w-[52rem]">
+          {rows.map((row, r) => [
+            r > 0 && (
+              <span key={`break-${r}`} aria-hidden className="contact-break" />
+            ),
+            ...row.map((photo) => (
+              <Photo
+                key={photo.frame}
+                className="contact-print"
+                style={{ "--ar": ratioOf(photo.ratio) } as CSSProperties}
+                src={photo.src}
+                alt={photo.alt}
+                ratio={photo.ratio}
+                note={`Frame ${photo.frame}`}
+                caption={`${photo.frame} — ${photo.caption}`}
+                frame={`frame ${photo.frame}`}
+                reveal
+                sizes="(min-width: 1024px) 280px, 45vw"
+              />
+            )),
+          ])}
+        </div>
       </div>
     </section>
   );

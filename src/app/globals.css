@@ -22,7 +22,7 @@
   /* Spacing rhythm. Sections pad by --space-section top and bottom, so two
      sections sit 2x apart; a section header sits --space-stack above its
      content. Keep page spacing on these rather than one-off margins. */
-  --space-section: clamp(3rem, 2rem + 3vw, 4.5rem);
+  --space-section: clamp(2rem, 1.5rem + 1.5vw, 3rem);
   --space-stack: clamp(2.5rem, 2rem + 1vw, 3rem);
   /* Height of a contact-sheet strip; the hero pads around it. */
   --sheet-h: clamp(5.5rem, 15svh, 9.5rem);
@@ -258,6 +258,49 @@ body {
 @keyframes sheet-drift {
   to {
     transform: translateX(-50%);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Contact prints: the Kept frames gallery (Photographs.tsx). Justified rows:
+   each print grows in proportion to its aspect ratio (--ar), so every print
+   in a row ends up the same height and the row fills the width exactly.
+--------------------------------------------------------------------------- */
+
+.contact-prints {
+  /* Target print height before rows stretch to fill. */
+  --row-h: clamp(8.5rem, 26vw, 12rem);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.75rem 0.75rem;
+}
+
+.contact-print {
+  flex: var(--ar) var(--ar) calc(var(--ar) * var(--row-h));
+  min-width: 0;
+}
+
+/* Keeps a short last line at the target height instead of blowing it up. */
+.contact-prints::after {
+  content: "";
+  flex: 1e6 1 0;
+}
+
+.contact-break {
+  display: none;
+}
+
+/* Wide screens: two fixed, balanced rows that each fill the width exactly. */
+@media (width >= 64rem) {
+  .contact-print {
+    flex-basis: 0;
+  }
+  .contact-break {
+    display: block;
+    flex-basis: 100%;
+  }
+  .contact-prints::after {
+    display: none;
   }
 }
 

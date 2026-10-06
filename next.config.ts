@@ -1,3 +1,4 @@
+import path from "node:path";
 import type { NextConfig } from "next";
 
 // GitHub Pages serves the site from /<repo-name>; the deploy workflow sets
@@ -7,6 +8,10 @@ const basePath = process.env.PAGES_BASE_PATH ?? "";
 const nextConfig: NextConfig = {
   // Static HTML export for GitHub Pages, which has no Node server.
   output: "export",
+  // Pin the project root. A stray package-lock.json in the home folder made
+  // Next guess the whole home directory as the root, which left the dev
+  // server watching the wrong tree and serving stale CSS.
+  turbopack: { root: path.resolve(__dirname) },
   basePath,
   // A static host can't resize on request, so scripts/images.mjs pre-sizes
   // every photo and this loader points each srcset entry at the right copy.

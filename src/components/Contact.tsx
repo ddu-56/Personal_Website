@@ -1,11 +1,11 @@
-import { RESUME_URL } from "./Masthead";
+import { GITHUB_URL, LINKEDIN_URL, RESUME_URL } from "./Masthead";
 import SectionHeader from "./SectionHeader";
 
 const EMAIL = "darrindu06@gmail.com";
 
 const links = [
-  { label: "GitHub", href: "https://github.com/ddu-56" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/darrin-du06" },
+  { label: "GitHub", href: GITHUB_URL },
+  { label: "LinkedIn", href: LINKEDIN_URL },
   { label: "Resume", href: RESUME_URL },
 ];
 
