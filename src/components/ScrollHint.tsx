@@ -18,8 +18,10 @@ export default function ScrollHint() {
       href="#about"
       aria-hidden={hidden}
       tabIndex={hidden ? -1 : undefined}
-      className={`eyebrow absolute bottom-6 left-1/2 -translate-x-1/2 text-[10px] text-muted transition-[opacity,color] duration-300 hover:text-ink ${
-        hidden ? "pointer-events-none opacity-0" : "opacity-100"
+      className={`eyebrow absolute bottom-6 left-1/2 -translate-x-1/2 text-[10px] text-muted transition-[opacity,color] hover:text-ink ${
+        hidden
+          ? "pointer-events-none opacity-0 duration-300 ease-in"
+          : "opacity-100 duration-600 ease-out"
       }`}
     >
       {/* Inner span carries the opening's fade, so it can't fight the

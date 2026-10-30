@@ -26,7 +26,9 @@ export default function Details({
       </p>
 
       <div
-        className="grid transition-[grid-template-rows] duration-500 ease-out motion-reduce:transition-none"
+        className={`grid transition-[grid-template-rows] motion-reduce:transition-none ${
+          open ? "duration-700 ease-out" : "duration-400 ease-in"
+        }`}
         style={{ gridTemplateRows: open ? "1fr" : "0fr" }}
       >
         <div id={id} inert={!open} className="overflow-hidden">

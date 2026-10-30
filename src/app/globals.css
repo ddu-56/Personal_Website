@@ -18,6 +18,15 @@
   /* How long the viewfinder takes to travel to a new subject. */
   --lock-ms: 620ms;
   --ease-snap: cubic-bezier(0.76, 0, 0.24, 1);
+  /* Things arriving come in fast and settle slowly (--ease-out); things
+     leaving ease off slowly, then go fast (--ease-in). Moves between two
+     places use --ease-snap. These also override Tailwind's ease-out and
+     ease-in utilities, so components get the same curves.
+     For an element that both enters and leaves, put the exit transition on
+     its resting state and the entrance on its "in" state: a transition runs
+     with the timing of the state it's heading to. */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.64, 0, 0.78, 0);
 
   /* Spacing rhythm. Sections pad by --space-section top and bottom, so two
      sections sit 2x apart; a section header sits --space-stack above its
@@ -117,7 +126,7 @@ body {
   line-height: 1;
   letter-spacing: 0.08em;
   white-space: nowrap;
-  animation: vf-fade 240ms ease-out both;
+  animation: vf-fade 360ms var(--ease-out) both;
   animation-delay: var(--lock-ms);
 }
 
@@ -230,15 +239,20 @@ body {
   border: 1px solid color-mix(in oklab, var(--color-ink) 55%, transparent);
   opacity: 0;
   transform: scale(1.08);
+  /* Leaving: lets go slowly, then is gone. */
   transition:
-    opacity 700ms ease-out,
-    transform 900ms var(--ease-snap);
+    opacity 500ms var(--ease-in),
+    transform 600ms var(--ease-in);
 }
 
-/* ContactSheet.tsx flips .is-on onto one frame at a time. */
+/* ContactSheet.tsx flips .is-on onto one frame at a time. Arriving: snaps
+   on, then settles. */
 .is-on > .sheet-box {
   opacity: 1;
   transform: none;
+  transition:
+    opacity 700ms var(--ease-out),
+    transform 1000ms var(--ease-out);
 }
 
 .sheet-box > span {
@@ -314,10 +328,6 @@ body {
    --d is a piece's delay: set per cue below, or by Reveals.tsx to stagger.
 --------------------------------------------------------------------------- */
 
-:root {
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-}
-
 .js [data-intro],
 .js [data-reveal] {
   opacity: 0;
@@ -345,7 +355,7 @@ body {
 /* Hero cues, in seconds from the start: a camera coming up. */
 .js [data-intro="sheet"] {
   transform: none;
-  transition: opacity 1600ms ease-out;
+  transition: opacity 1600ms var(--ease-out);
 }
 .js [data-intro="nav"] { --d: 100ms; }
 .js [data-intro="eyebrow"] { --d: 200ms; }
@@ -394,7 +404,7 @@ body {
   opacity: 0;
   transform: translateY(0.12em) rotateX(88deg);
   transition:
-    opacity 500ms ease-out,
+    opacity 500ms var(--ease-out),
     transform 1000ms var(--ease-out);
   transition-delay: calc(var(--fold-delay) + var(--i) * var(--fold-stagger));
 }
